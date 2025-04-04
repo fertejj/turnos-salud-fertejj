@@ -4,6 +4,7 @@ import Spinner from '../components/ui/Spinner';
 
 type Props = {
   children: React.ReactNode;
+  allowedRoles?: string[];
 };
 
 export default function PrivateRoute({ children }: Props) {

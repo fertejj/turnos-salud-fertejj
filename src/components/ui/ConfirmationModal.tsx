@@ -13,23 +13,23 @@ export default function ConfirmationModal({ date, time, onClose, onConfirm }: Pr
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded shadow-lg p-6 w-full max-w-sm text-center border border-gray-300">
-        <h2 className="text-xl font-semibold text-amber-600 mb-4">¡Turno reservado!</h2>
-        <p className="text-gray-700 mb-2">Tu turno fue registrado con éxito:</p>
-        <p className="text-lg font-medium text-gray-800">
+      <div className="bg-surface rounded shadow-lg p-6 w-full max-w-sm text-center border border-border-base">
+        <h2 className="text-xl font-semibold text-primary-dark mb-4">¡Turno reservado!</h2>
+        <p className="text-text mb-2">Tu turno fue registrado con éxito:</p>
+        <p className="text-lg font-medium text-text-main">
           📅 {formatted.charAt(0).toUpperCase() + formatted.slice(1)} a las ⏰ {time} hs
         </p>
 
         <div className="flex justify-center gap-4 mt-6">
           <button
             onClick={onConfirm}
-            className="bg-amber-500 text-white font-medium px-4 py-2 rounded hover:bg-amber-600 transition"
+            className="bg-primary hover:bg-primary-dark text-white font-medium px-4 py-2 rounded transition"
           >
             Ir al panel
           </button>
           <button
             onClick={onClose}
-            className="bg-gray-100 text-gray-600 px-4 py-2 rounded hover:bg-gray-200 transition"
+            className="bg-hover-surface hover:bg-border-base text-soft px-4 py-2 rounded transition"
           >
             Cerrar
           </button>

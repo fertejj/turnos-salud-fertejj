@@ -15,7 +15,7 @@ import AuthLayout from "../components/layout/AuthLayout";
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("paciente"); // paciente o profesional
+  const [role, setRole] = useState("paciente");
   const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -43,7 +43,7 @@ export default function Register() {
 
       await setDoc(doc(db, "users", user.uid), {
         email: user.email,
-        role, // usamos el mismo role seleccionado en el formulario
+        role,
       });
 
       navigate("/");
@@ -54,8 +54,8 @@ export default function Register() {
 
   return (
     <AuthLayout>
-      <div className="max-w-md w-full p-6 bg-white text-gray-800 shadow-md rounded border border-gray-200">
-        <h1 className="text-2xl font-bold mb-6 text-amber-600">Crear Cuenta</h1>
+      <div className="max-w-md w-full p-6 bg-surface text-text-main shadow-md rounded border border-border-base">
+        <h1 className="text-2xl font-bold mb-6 text-primary-dark">Crear Cuenta</h1>
         <form onSubmit={handleRegister} className="flex flex-col gap-4">
           <Input
             type="email"
@@ -73,7 +73,7 @@ export default function Register() {
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="bg-white border border-gray-300 text-gray-800 p-2 rounded focus:outline-none focus:ring-2 focus:ring-amber-400"
+            className="bg-surface border border-border-base text-text p-2 rounded focus:outline-none focus:ring-2 focus:ring-primary-light"
           >
             <option value="paciente">Paciente</option>
             <option value="profesional">Profesional</option>
@@ -82,7 +82,7 @@ export default function Register() {
           <PrimaryButton type="submit">Registrarme</PrimaryButton>
         </form>
 
-        <div className="my-4 text-center text-gray-400">— o —</div>
+        <div className="my-4 text-center text-soft">— o —</div>
 
         <SecondaryButton onClick={handleGoogleSignIn}>
           Registrarme con Google

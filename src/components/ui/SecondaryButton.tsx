@@ -7,7 +7,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 export default function SecondaryButton({ children, icon, ...props }: Props) {
   return (
     <button
-      className="bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300 p-2 rounded w-full transition flex items-center justify-center gap-2"
+      className="bg-hover-surface hover:bg-border-base text-text border border-border-base p-2 rounded w-full transition flex items-center justify-center gap-2"
       {...props}
     >
       {icon}

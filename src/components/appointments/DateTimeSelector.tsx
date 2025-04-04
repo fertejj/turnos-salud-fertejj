@@ -29,8 +29,8 @@ export default function DateTimeSelector({
   const today = startOfToday();
 
   return (
-    <div className="bg-white p-4 rounded shadow border border-gray-200 max-w-md mx-auto">
-      <h2 className="text-lg font-bold text-amber-600 mb-4">Seleccioná una fecha</h2>
+    <div className="bg-surface p-4 rounded shadow border border-border-base max-w-md mx-auto">
+      <h2 className="text-lg font-bold text-primary-dark mb-4">Seleccioná una fecha</h2>
 
       <div className="grid grid-cols-3 gap-2 mb-6">
         {upcomingDays.map((date) => {
@@ -45,10 +45,10 @@ export default function DateTimeSelector({
               onClick={() => !isPast && onDateChange(date)}
               className={`p-2 rounded border text-sm transition ${
                 isPast
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  ? 'bg-hover-surface text-soft cursor-not-allowed'
                   : isSelected
-                  ? 'bg-amber-500 text-white'
-                  : 'bg-gray-100 text-gray-800'
+                  ? 'bg-primary text-white'
+                  : 'bg-hover-surface text-text'
               }`}
               disabled={isPast}
             >
@@ -58,7 +58,7 @@ export default function DateTimeSelector({
         })}
       </div>
 
-      <h2 className="text-lg font-bold text-amber-600 mb-4">Seleccioná un horario</h2>
+      <h2 className="text-lg font-bold text-primary-dark mb-4">Seleccioná un horario</h2>
       <div className="grid grid-cols-3 gap-2">
         {availableHours.map((hour) => {
           const isBooked = bookedTimes.includes(hour);
@@ -70,10 +70,10 @@ export default function DateTimeSelector({
               onClick={() => !isBooked && onTimeChange(hour)}
               className={`p-2 rounded border text-sm transition ${
                 isBooked
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  ? 'bg-border-base text-soft cursor-not-allowed'
                   : isSelected
-                  ? 'bg-amber-500 text-white'
-                  : 'bg-gray-100 text-gray-800'
+                  ? 'bg-primary text-white'
+                  : 'bg-hover-surface text-text'
               }`}
               disabled={isBooked}
             >
