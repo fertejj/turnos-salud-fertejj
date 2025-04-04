@@ -17,7 +17,7 @@ import ConfirmationModal from "../../../components/ui/ConfirmationModal";
 import DateTimeSelector from "../../../components/appointments/DateTimeSelector";
 import AppointmentSummary from "../../../components/appointments/AppointmentSummary";
 import PrimaryButton from "../../../components/ui/PrimaryButton";
-import PatientLayout from "../../../components/layout/PatientLayout";
+import PatientLayout from "../../../layout/PatientLayout";
 
 export default function NewTurn() {
   const [date, setDate] = useState(new Date());

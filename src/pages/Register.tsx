@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Input from "../components/ui/Input";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import SecondaryButton from "../components/ui/SecondaryButton";
-import AuthLayout from "../components/layout/AuthLayout";
+import AuthLayout from "../layout/AuthLayout";
 
 export default function Register() {
   const [email, setEmail] = useState("");

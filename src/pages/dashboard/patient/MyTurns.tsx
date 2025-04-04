@@ -13,7 +13,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import toast from "react-hot-toast";
 import { FiTrash2, FiCalendar, FiClock } from "react-icons/fi";
-import PatientLayout from "../../../components/layout/PatientLayout";
+import PatientLayout from "../../../layout/PatientLayout";
 
 type Appointment = {
   id: string;

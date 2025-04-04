@@ -9,14 +9,17 @@ import AdminDashboard from "../pages/dashboard/AdminDashboard";
 import NewTurn from "../pages/dashboard/patient/NewTurn";
 import MyTurns from "../pages/dashboard/patient/MyTurns";
 import Disponibility from "../pages/dashboard/professional/Disponibility";
+import ProfessionalLayout from "../layout/ProfessionalLayout";
+import Schedule from "../pages/dashboard/professional/Schedule"; // crear este componente
 
 export default function AppRouter() {
   return (
     <Routes>
+      {/* Auth */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-      {/* Ruta raíz que redirige según el rol */}
+      {/* Ruta raíz protegida */}
       <Route
         path="/"
         element={
@@ -26,7 +29,7 @@ export default function AppRouter() {
         }
       />
 
-      {/* Dashboards según el rol */}
+      {/* Paciente */}
       <Route
         path="/dashboard/paciente"
         element={
@@ -43,7 +46,6 @@ export default function AppRouter() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/dashboard/paciente/mis-turnos"
         element={
@@ -52,22 +54,22 @@ export default function AppRouter() {
           </PrivateRoute>
         }
       />
+
+      {/* Profesional (con layout) */}
       <Route
         path="/dashboard/profesional"
         element={
-          <PrivateRoute>
-            <ProfesionalDashboard />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/dashboard/profesional/disponibilidad"
-        element={
           <PrivateRoute allowedRoles={['profesional']}>
-            <Disponibility />
+            <ProfessionalLayout />
           </PrivateRoute>
         }
-      />
+      >
+        <Route index element={<ProfesionalDashboard />} />
+        <Route path="disponibilidad" element={<Disponibility />} />
+        <Route path="agenda" element={<Schedule />} />
+      </Route>
+
+      {/* Admin */}
       <Route
         path="/dashboard/admin"
         element={

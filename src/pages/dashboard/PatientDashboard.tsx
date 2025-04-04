@@ -5,8 +5,8 @@ import { db } from "../../services/firebase";
 import { format, addDays } from "date-fns";
 import { es } from "date-fns/locale";
 import { Link } from "react-router-dom";
-import PatientLayout from "../../components/layout/PatientLayout";
 import { FiCalendar, FiClock, FiPlusCircle, FiList } from "react-icons/fi";
+import PatientLayout from "../../layout/PatientLayout";
 
 export default function PacienteDashboard() {
   const { user } = useAuth();
