@@ -1,16 +1,25 @@
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import Spinner from '../components/ui/Spinner';
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
-type Props = {
+type PrivateRouteProps = {
   children: React.ReactNode;
   allowedRoles?: string[];
 };
 
-export default function PrivateRoute({ children }: Props) {
-  const { user, loading } = useAuth();
+export default function PrivateRoute({ children, allowedRoles }: PrivateRouteProps) {
+  const { user, loading, userData } = useAuth();
 
-  if (loading) return <Spinner/>;
+  // Mientras se cargan datos del usuario
+  if (loading) return <p className="p-4 text-gray-500">Cargando...</p>;
 
-  return user ? children : <Navigate to="/login" replace />;
+  // Si no está logueado
+  if (!user) return <Navigate to="/login" replace />;
+
+  // Si hay roles definidos y el rol del usuario no está permitido
+  if (allowedRoles && (!userData || !allowedRoles.includes(userData.role))) {
+    return <Navigate to="/" replace />;
+  }
+
+  // Si todo está OK, renderiza los children
+  return <>{children}</>;
 }

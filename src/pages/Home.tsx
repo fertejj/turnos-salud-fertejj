@@ -1,29 +1,22 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUserRole } from '../hooks/useUserRole';
-import FullPageSpinner from '../components/ui/FullPageSpinner';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Home() {
-  const { role, loading } = useUserRole();
+  const { user, userData } = useAuth(); // Asegurate de tener userData. Debe contener el campo `role`.
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (loading) return;
+    if (!user || !userData) return;
 
-    switch (role) {
-      case 'paciente':
-        navigate('/dashboard/paciente');
-        break;
-      case 'profesional':
-        navigate('/dashboard/profesional');
-        break;
-      case 'admin':
-        navigate('/dashboard/admin');
-        break;
-      default:
-        navigate('/login');
+    if (userData.role === "profesional") {
+      navigate("/dashboard/profesional");
+    } else if (userData.role === "admin") {
+      navigate("/dashboard/admin");
+    } else {
+      navigate("/login"); // fallback en caso de rol desconocido
     }
-  }, [role, loading, navigate]);
+  }, [user, userData, navigate]);
 
-  return <FullPageSpinner text="Redirigiendo al panel..." />;
+  return null; // No se renderiza nada, solo redirección
 }

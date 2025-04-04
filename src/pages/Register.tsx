@@ -15,7 +15,6 @@ import AuthLayout from "../layout/AuthLayout";
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("paciente");
   const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -26,7 +25,7 @@ export default function Register() {
 
       await setDoc(doc(db, "users", user.uid), {
         email: user.email,
-        role,
+        role: "profesional",
       });
 
       navigate("/");
@@ -43,7 +42,7 @@ export default function Register() {
 
       await setDoc(doc(db, "users", user.uid), {
         email: user.email,
-        role,
+        role: "profesional",
       });
 
       navigate("/");
@@ -55,7 +54,7 @@ export default function Register() {
   return (
     <AuthLayout>
       <div className="max-w-md w-full p-6 bg-surface text-text-main shadow-md rounded border border-border-base">
-        <h1 className="text-2xl font-bold mb-6 text-primary-dark">Crear Cuenta</h1>
+        <h1 className="text-2xl font-bold mb-6 text-primary-dark">Crear Cuenta Profesional</h1>
         <form onSubmit={handleRegister} className="flex flex-col gap-4">
           <Input
             type="email"
@@ -69,15 +68,6 @@ export default function Register() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="bg-surface border border-border-base text-text p-2 rounded focus:outline-none focus:ring-2 focus:ring-primary-light"
-          >
-            <option value="paciente">Paciente</option>
-            <option value="profesional">Profesional</option>
-          </select>
 
           <PrimaryButton type="submit">Registrarme</PrimaryButton>
         </form>

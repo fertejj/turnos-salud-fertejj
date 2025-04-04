@@ -1,62 +1,95 @@
-import { useAuth } from '../../contexts/AuthContext';
-import { useEffect, useState } from 'react';
-import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
-import { db } from '../../services/firebase';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { Link } from 'react-router-dom';
+import { useAuth } from "../../contexts/AuthContext";
+import { useEffect, useState } from "react";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy,
+  limit,
+  Timestamp,
+} from "firebase/firestore";
+import { db } from "../../services/firebase";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { Link } from "react-router-dom";
 
-export default function PacienteDashboard() {
+type Turno = {
+  date: string;
+  time: string;
+  patientName?: string;
+};
+
+export default function ProfesionalDashboard() {
   const { user } = useAuth();
-  const [proxTurno, setProxTurno] = useState<{ date: string; time: string } | null>(null);
+  const [proxTurno, setProxTurno] = useState<Turno | null>(null);
 
   useEffect(() => {
     const fetchProximoTurno = async () => {
       if (!user) return;
+
       const q = query(
-        collection(db, 'turnos'),
-        where('userId', '==', user.uid),
-        orderBy('date'),
-        orderBy('time'),
+        collection(db, "turnos"),
+        where("professionalId", "==", user.uid),
+        orderBy("date"),
+        orderBy("time"),
         limit(1)
       );
+
       const snap = await getDocs(q);
       const data = snap.docs[0]?.data();
-      if (data) setProxTurno(data as any);
+      if (data) setProxTurno(data as Turno);
     };
 
     fetchProximoTurno();
   }, [user]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <h1 className="text-2xl font-bold text-amber-600 mb-4">
-        Bienvenido{user?.displayName ? `, ${user.displayName}` : ''} 👋
+    <div className="max-w-5xl mx-auto px-4 py-6">
+      <h1 className="text-2xl font-bold text-primary-dark mb-4">
+        Bienvenido{user?.displayName ? `, ${user.displayName}` : ""} 👋
       </h1>
 
+      {/* Próximo turno */}
       {proxTurno ? (
-        <div className="bg-green-50 border border-green-200 p-4 rounded mb-6 text-center">
-          <p className="text-gray-700">Tu próximo turno:</p>
-          <p className="text-lg text-green-700 font-medium">
-            {format(new Date(proxTurno.date), "EEEE d 'de' MMMM 'de' yyyy", { locale: es })} a las {proxTurno.time} hs
+        <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
+          <p className="text-gray-700 text-sm">Próximo turno agendado:</p>
+          <p className="text-lg text-blue-700 font-semibold">
+            {format(new Date(proxTurno.date), "EEEE d 'de' MMMM", { locale: es })} a las{" "}
+            {proxTurno.time} hs
           </p>
+          {proxTurno.patientName && (
+            <p className="text-sm text-gray-600 mt-1">Paciente: {proxTurno.patientName}</p>
+          )}
         </div>
       ) : (
-        <p className="text-gray-600 mb-6">No tenés turnos próximos agendados.</p>
+        <p className="text-gray-500 mb-6">No tenés turnos agendados aún.</p>
       )}
 
-      <div className="flex flex-col gap-3 max-w-sm">
+      {/* Acciones rápidas */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <Link
-          to="/dashboard/paciente/turnos/nuevo"
-          className="bg-amber-500 text-white px-4 py-2 rounded text-center font-medium hover:bg-amber-600 transition"
+          to="/dashboard/profesional/agendar"
+          className="bg-surface border border-border-base rounded-lg p-4 hover:bg-gray-100 transition"
         >
-          Agendar nuevo turno
+          <p className="text-lg font-semibold text-primary-dark">Agendar turno</p>
+          <p className="text-sm text-gray-600">Completa la informacion del paciente</p>
         </Link>
+
         <Link
-          to="/dashboard/paciente/mis-turnos"
-          className="bg-gray-100 text-gray-800 px-4 py-2 rounded text-center font-medium border hover:bg-gray-200 transition"
+          to="/dashboard/profesional/disponibilidad"
+          className="bg-surface border border-border-base rounded-lg p-4 hover:bg-gray-100 transition"
         >
-          Ver mis turnos
+          <p className="text-lg font-semibold text-primary-dark">Disponibilidad semanal</p>
+          <p className="text-sm text-gray-600">Visualizá tu disponibilidad actual</p>
+        </Link>
+
+        <Link
+          to="/dashboard/profesional/configuracion"
+          className="bg-surface border border-border-base rounded-lg p-4 hover:bg-gray-100 transition"
+        >
+          <p className="text-lg font-semibold text-primary-dark">Configuración</p>
+          <p className="text-sm text-gray-600">Actualizá tu perfil y datos</p>
         </Link>
       </div>
     </div>

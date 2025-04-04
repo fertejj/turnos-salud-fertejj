@@ -24,8 +24,8 @@ export default function ProfessionalLayout({ children }: Props) {
           <Link to="/dashboard/profesional/agenda" className="text-text hover:text-primary-dark">
             Agenda
           </Link>
-          <Link to="/dashboard/profesional/disponibilidad" className="text-text hover:text-primary-dark">
-            Disponibilidad
+          <Link to="/dashboard/profesional/" className="text-text hover:text-primary-dark">
+            
           </Link>
           <Link to="/dashboard/profesional/configuracion" className="text-text hover:text-primary-dark">
             Configuración
@@ -51,8 +51,8 @@ export default function ProfessionalLayout({ children }: Props) {
           <Link to="/dashboard/profesional/agenda" className="block text-text">
             Agenda
           </Link>
-          <Link to="/dashboard/profesional/disponibilidad" className="block text-text">
-            Disponibilidad
+          <Link to="/dashboard/profesional/" className="block text-text">
+            
           </Link>
           <Link to="/dashboard/profesional/configuracion" className="block text-text">
             Configuración
