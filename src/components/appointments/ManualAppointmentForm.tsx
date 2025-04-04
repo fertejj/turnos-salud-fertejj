@@ -1,4 +1,7 @@
-import { useState } from "react";
+// ManualAppointmentForm.tsx (versión estable sin react-input-mask)
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   collection,
   addDoc,
@@ -13,47 +16,69 @@ import { db } from "../../services/firebase";
 import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 import PrimaryButton from "../ui/PrimaryButton";
+import { useState } from "react";
+
+const appointmentSchema = z.object({
+  dni: z
+    .string()
+    .min(7, "El DNI debe tener al menos 7 dígitos")
+    .regex(/^\d{7,9}$/, "Formato de DNI inválido"),
+  name: z.string().min(2, "Nombre requerido"),
+  phone: z
+    .string()
+    .min(8, "Teléfono requerido")
+    .regex(/^\d{8,15}$/, "Formato de teléfono inválido"),
+  email: z.string().email("Email inválido").optional().or(z.literal("")),
+  date: z.string().min(1, "Fecha requerida"),
+  time: z.string().min(1, "Hora requerida"),
+  notes: z.string().optional(),
+});
+
+type AppointmentData = z.infer<typeof appointmentSchema>;
 
 export default function ManualAppointmentForm() {
   const { user } = useAuth();
+  const [lockedFields, setLockedFields] = useState({ name: false, phone: false });
 
-  const [dni, setDni] = useState("");
-  const [patientName, setPatientName] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [notes, setNotes] = useState("");
-  const [nameLocked, setNameLocked] = useState(false); // Para bloquear edición
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<AppointmentData>({
+    resolver: zodResolver(appointmentSchema),
+  });
+
+  const dni = watch("dni");
 
   const checkIfPatientExists = async () => {
     if (!dni) return;
-
     const pacientesRef = collection(db, "pacientes");
     const q = query(pacientesRef, where("dni", "==", dni));
     const snapshot = await getDocs(q);
 
     if (!snapshot.empty) {
       const paciente = snapshot.docs[0].data();
-      setPatientName(paciente.name);
-      setNameLocked(true);
+      setValue("name", paciente.name);
+      setValue("phone", paciente.phone || "");
+      setValue("email", paciente.email || "");
+      setLockedFields({ name: true, phone: true });
       toast.success("Paciente encontrado");
     } else {
-      setPatientName("");
-      setNameLocked(false);
-      toast("Nuevo paciente. Ingresá nombre completo");
+      setValue("name", "");
+      setValue("phone", "");
+      setValue("email", "");
+      setLockedFields({ name: false, phone: false });
+      toast("Nuevo paciente. Completá los datos requeridos");
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: AppointmentData) => {
     if (!user) return;
-
-    if (!dni || !patientName || !date || !time) {
-      toast.error("Completá todos los campos obligatorios.");
-      return;
-    }
-
+    const selectedDateTime = new Date(`${data.date}T${data.time}`);
     const now = new Date();
-    const selectedDateTime = new Date(`${date}T${time}`);
     if (selectedDateTime < now) {
       toast.error("No se puede agendar un turno en el pasado.");
       return;
@@ -61,30 +86,31 @@ export default function ManualAppointmentForm() {
 
     try {
       const turnosRef = collection(db, "turnos");
-      const existingTurno = await getDocs(
-        query(
-          turnosRef,
-          where("professionalId", "==", user.uid),
-          where("date", "==", date),
-          where("time", "==", time)
-        )
+      const qTurno = query(
+        turnosRef,
+        where("professionalId", "==", user.uid),
+        where("date", "==", data.date),
+        where("time", "==", data.time)
       );
-      if (!existingTurno.empty) {
+
+      const existing = await getDocs(qTurno);
+      if (!existing.empty) {
         toast.error("Ya tenés un turno agendado en ese horario.");
         return;
       }
 
-      // Buscar o crear paciente
       const pacientesRef = collection(db, "pacientes");
-      const q = query(pacientesRef, where("dni", "==", dni));
-      const pacientesSnapshot = await getDocs(q);
+      const qPaciente = query(pacientesRef, where("dni", "==", data.dni));
+      const pacientesSnapshot = await getDocs(qPaciente);
 
       let patientId: string;
       if (pacientesSnapshot.empty) {
         const newPatientRef = doc(pacientesRef);
         await setDoc(newPatientRef, {
-          dni,
-          name: patientName,
+          dni: data.dni,
+          name: data.name,
+          phone: data.phone,
+          email: data.email || "",
           createdAt: Timestamp.now(),
         });
         patientId = newPatientRef.id;
@@ -95,30 +121,28 @@ export default function ManualAppointmentForm() {
       await addDoc(turnosRef, {
         professionalId: user.uid,
         patientId,
-        patientName,
-        dni,
-        date,
-        time,
-        notes: notes || "",
+        patientName: data.name,
+        dni: data.dni,
+        phone: data.phone,
+        email: data.email || "",
+        date: data.date,
+        time: data.time,
+        notes: data.notes || "",
         createdAt: Timestamp.now(),
       });
 
       toast.success("Turno agendado con éxito");
-      setDni("");
-      setPatientName("");
-      setDate("");
-      setTime("");
-      setNotes("");
-      setNameLocked(false);
-    } catch (error) {
-      console.error("Error al guardar turno:", error);
-      toast.error("Hubo un error al guardar el turno.");
+      reset();
+      setLockedFields({ name: false, phone: false });
+    } catch (err) {
+      console.error(err);
+      toast.error("Error al guardar el turno");
     }
   };
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className="space-y-4 bg-white border p-6 rounded-lg shadow max-w-xl mx-auto"
     >
       <h2 className="text-xl font-bold text-primary-dark mb-4">
@@ -126,35 +150,43 @@ export default function ManualAppointmentForm() {
       </h2>
 
       <div>
-        <label className="block text-sm font-medium mb-1">
-          DNI del paciente *
-        </label>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={dni}
-            onChange={(e) => setDni(e.target.value)}
-            onBlur={checkIfPatientExists}
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            required
-          />
-        </div>
+        <label className="block text-sm font-medium mb-1">DNI *</label>
+        <input
+          {...register("dni")}
+          onBlur={checkIfPatientExists}
+          className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+        />
+        {errors.dni && <p className="text-red-500 text-sm">{errors.dni.message}</p>}
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">
-          Nombre del paciente *
-        </label>
+        <label className="block text-sm font-medium mb-1">Nombre *</label>
         <input
-          type="text"
-          value={patientName}
-          onChange={(e) => setPatientName(e.target.value)}
-          disabled={nameLocked}
-          className={`w-full border border-gray-300 rounded px-3 py-2 text-sm ${
-            nameLocked ? "bg-gray-100 text-gray-500" : ""
-          }`}
-          required
+          {...register("name")}
+          disabled={lockedFields.name}
+          className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
         />
+        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-1">Teléfono *</label>
+        <input
+          {...register("phone")}
+          disabled={lockedFields.phone}
+          className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+        />
+        {errors.phone && <p className="text-red-500 text-sm">{errors.phone.message}</p>}
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-1">Email (opcional)</label>
+        <input
+          type="email"
+          {...register("email")}
+          className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+        />
+        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -162,32 +194,27 @@ export default function ManualAppointmentForm() {
           <label className="block text-sm font-medium mb-1">Fecha *</label>
           <input
             type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
+            {...register("date")}
             className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            required
           />
+          {errors.date && <p className="text-red-500 text-sm">{errors.date.message}</p>}
         </div>
 
         <div>
           <label className="block text-sm font-medium mb-1">Hora *</label>
           <input
             type="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
+            {...register("time")}
             className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            required
           />
+          {errors.time && <p className="text-red-500 text-sm">{errors.time.message}</p>}
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">
-          Notas (opcional)
-        </label>
+        <label className="block text-sm font-medium mb-1">Notas (opcional)</label>
         <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
+          {...register("notes")}
           className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
           rows={3}
         />
