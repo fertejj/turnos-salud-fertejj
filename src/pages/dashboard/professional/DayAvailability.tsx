@@ -2,7 +2,6 @@ import TimeSlotItem from "./TimeSlotItem";
 import AddTimeSlot from "./AddTimeSlot";
 import type { Day, TimeSlot } from "./types";
 
-
 type Props = {
   day: Day;
   label: string;
@@ -17,7 +16,6 @@ type Props = {
   onChangeTo: (val: string) => void;
 };
 
-
 export default function DayAvailability({
   day,
   label,
@@ -31,8 +29,7 @@ export default function DayAvailability({
   onChangeFrom,
   onChangeTo,
 }: Props) {
-    const isValid = Boolean(from && to && from < to);
-
+  const isValid = Boolean(from && to && from < to);
 
   return (
     <div className="bg-surface border border-border-base rounded p-4">
@@ -41,6 +38,8 @@ export default function DayAvailability({
       {slots.map((slot, i) => (
         <TimeSlotItem
           key={i}
+          index={i}
+          allSlots={slots}
           from={slot.from}
           to={slot.to}
           onChangeFrom={(val) => onUpdateSlot(i, "from", val)}
