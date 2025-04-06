@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../services/firebase";
+import { auth, db } from "../../../services/firebase";
+
 
 // Datos adicionales del usuario (extendible)
 type UserData = {

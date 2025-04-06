@@ -1,13 +1,14 @@
 import { Routes, Route } from "react-router-dom";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import Home from "../pages/Home";
 import PrivateRoute from "./PrivateRoute";
-import ProfesionalDashboard from "../pages/dashboard/ProfesionalDashboard";
-import AdminDashboard from "../pages/dashboard/AdminDashboard";
+import Login from "../features/auth/pages/Login";
+import Register from "../features/auth/pages/Register";
+import Home from "../app/Home";
+import ProfessionalLayout from "../features/dashboard/layout/ProfessionalLayout";
+import Schedule from "../features/schedule/pages/Schedule";
+import AdminDashboard from "../features/dashboard/pages/AdminDashboard";
+import ProfesionalDashboard from "../features/dashboard/pages/ProfesionalDashboard";
 
-import ProfessionalLayout from "../layout/ProfessionalLayout";
-import Schedule from "../pages/dashboard/professional/Schedule";
+
 
 export default function AppRouter() {
   return (

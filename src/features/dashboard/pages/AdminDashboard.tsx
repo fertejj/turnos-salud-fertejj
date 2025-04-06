@@ -1,4 +1,4 @@
-import LogoutButton from '../../components/ui/LogoutButton';
+import LogoutButton from "../../../shared/components/LogoutButton";
 
 export default function AdminDashboard() {
   return (

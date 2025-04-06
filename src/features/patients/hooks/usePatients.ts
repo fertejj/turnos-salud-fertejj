@@ -10,8 +10,9 @@ import {
     query,
     where,
 } from 'firebase/firestore'
-import { db } from '../services/firebase'
-import { Patient } from '../types/patient'
+import { Patient } from '../types'
+import { db } from '../../../services/firebase'
+
 
 export function usePatients(professionalId: string) {
     const [patients, setPatients] = useState<Patient[]>([])

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FiMenu } from "react-icons/fi";
 import { Link, Outlet } from "react-router-dom";
-import LogoutButton from "../components/ui/LogoutButton";
+import LogoutButton from "../../../shared/components/LogoutButton";
 
 type Props = {
   children?: React.ReactNode;

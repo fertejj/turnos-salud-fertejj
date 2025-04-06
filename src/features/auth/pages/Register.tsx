@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { auth, db } from "../services/firebase";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -7,10 +6,11 @@ import {
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import Input from "../components/ui/Input";
-import PrimaryButton from "../components/ui/PrimaryButton";
-import SecondaryButton from "../components/ui/SecondaryButton";
-import AuthLayout from "../layout/AuthLayout";
+import { auth, db } from "../../../services/firebase";
+import AuthLayout from "../../../shared/layout/AuthLayout";
+import Input from "../../../shared/components/Input";
+import PrimaryButton from "../../../shared/components/PrimaryButton";
+import SecondaryButton from "../../../shared/components/SecondaryButton";
 
 export default function Register() {
   const [email, setEmail] = useState("");

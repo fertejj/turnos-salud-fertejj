@@ -5,12 +5,12 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../services/firebase";
-import Input from "../components/ui/Input";
-import PrimaryButton from "../components/ui/PrimaryButton";
-import SecondaryButton from "../components/ui/SecondaryButton";
-import AuthLayout from "../layout/AuthLayout";
 import { FaGoogle } from "react-icons/fa";
+import { auth } from "../../../services/firebase";
+import AuthLayout from "../../../shared/layout/AuthLayout";
+import Input from "../../../shared/components/Input";
+import PrimaryButton from "../../../shared/components/PrimaryButton";
+import SecondaryButton from "../../../shared/components/SecondaryButton";
 
 export default function Login() {
   const [email, setEmail] = useState("");

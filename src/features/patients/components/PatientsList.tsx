@@ -1,8 +1,9 @@
 // src/dashboard/professional/patients/PatientsList.tsx
 import { useState } from 'react'
 import PatientForm from './PatientForm'
-import { usePatients } from '../../../../hooks/usePatients'
-import { Patient } from '../../../../types/patient'
+import { usePatients } from '../hooks/usePatients'
+import { Patient } from '../types'
+
 
 interface PatientsListProps {
   professionalId: string

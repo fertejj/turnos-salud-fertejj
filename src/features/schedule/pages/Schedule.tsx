@@ -1,4 +1,4 @@
-import ManualAppointmentForm from "../../../components/appointments/ManualAppointmentForm";
+import ManualAppointmentForm from "../../appointments/components/ManualAppointmentForm";
 
 export default function Schedule() {
   return (

@@ -12,11 +12,12 @@ import {
   doc,
   setDoc,
 } from "firebase/firestore";
-import { db } from "../../services/firebase";
-import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
-import PrimaryButton from "../ui/PrimaryButton";
+
 import { useState } from "react";
+import { useAuth } from "../../auth/context/AuthContext";
+import { db } from "../../../services/firebase";
+import PrimaryButton from "../../../shared/components/PrimaryButton";
 
 const appointmentSchema = z.object({
   dni: z

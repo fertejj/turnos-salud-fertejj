@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../features/auth/context/AuthContext";
 
 export default function Home() {
   const { user, userData } = useAuth(); // Asegurate de tener userData. Debe contener el campo `role`.
