@@ -3,6 +3,7 @@ import { FiCheck } from "react-icons/fi";
 type Props = {
   from: string;
   to: string;
+  day: any;
   onChangeFrom: (val: string) => void;
   onChangeTo: (val: string) => void;
   onConfirm: () => void;
@@ -16,6 +17,7 @@ export default function AddTimeSlot({
   onChangeFrom,
   onChangeTo,
   onConfirm,
+  day,
   isValid,
   validationError,
 }: Props) {
