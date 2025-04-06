@@ -20,7 +20,7 @@ export function usePatients(professionalId: string) {
 
     useEffect(() => {
         const q = query(
-            collection(db, 'patient'),
+            collection(db, 'patients'),
             where('professionalId', '==', professionalId)
         )
 
