@@ -17,7 +17,7 @@ type Props = {
 };
 
 export default function DayAvailability({
-  day,
+
   label,
   slots,
   onUpdateSlot,
@@ -49,7 +49,7 @@ export default function DayAvailability({
       ))}
 
       <AddTimeSlot
-        day={day}
+
         from={isAdding ? from : ""}
         to={isAdding ? to : ""}
         onChangeFrom={onChangeFrom}
