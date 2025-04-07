@@ -1,6 +1,7 @@
 import TimeSlotItem from "./TimeSlotItem";
 import AddTimeSlot from "./AddTimeSlot";
-import type { Day, TimeSlot } from "./types";
+import { TimeSlot } from "../hooks/useAvailability";
+import { Day } from "date-fns";
 
 type Props = {
   day: Day;

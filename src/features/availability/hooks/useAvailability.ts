@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "../services/firebase";
+
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth, db } from "../../../services/firebase";
 
 export type TimeSlot = {
   from: string;

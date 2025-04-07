@@ -97,16 +97,16 @@ export default function Login() {
           </PrimaryButton>
         </form>
 
-        <div className="my-4 text-center text-soft">— o —</div>
+        {/* <div className="my-4 text-center text-soft">— o —</div> */}
 
-        <SecondaryButton
+        {/* <SecondaryButton
           onClick={handleGoogleSignIn}
           icon={<FaGoogle className="text-xl" />}
           type="button"
           disabled={loading}
         >
           {loading ? "Cargando..." : "Ingresar con Google"}
-        </SecondaryButton>
+        </SecondaryButton> */}
       </div>
     </AuthLayout>
   );

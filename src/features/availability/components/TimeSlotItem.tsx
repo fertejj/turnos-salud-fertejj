@@ -1,6 +1,7 @@
 import { FiTrash, FiEdit2, FiCheck } from "react-icons/fi";
 import { useState, useEffect } from "react";
-import type { TimeSlot } from "./types";
+import { TimeSlot } from "../hooks/useAvailability";
+
 
 type Props = {
   from: string;
