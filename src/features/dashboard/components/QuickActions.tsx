@@ -1,47 +1,68 @@
-// dashboard/components/QuickActions.tsx
-import { Link } from "react-router-dom";
+import {
+  FiUserPlus,
+  FiCalendar,
+  FiFileText,
+  FiDollarSign,
+} from "react-icons/fi"
+import { useNavigate } from "react-router-dom"
+import CardContent from "../../../shared/components/ui/card/CardContent"
+import Card from "../../../shared/components/ui/card/Card"
 
-export default function QuickActions() {
+const QuickActions = () => {
+  const navigate = useNavigate()
+
+  const actions = [
+    {
+      title: "Nuevo turno",
+      description: "Agendá una nueva consulta",
+      icon: FiCalendar,
+      path: "/dashboard/profesional/crear-turno",
+    },
+    {
+      title: "Nuevo paciente",
+      description: "Registrá un nuevo paciente",
+      icon: FiUserPlus,
+      path: "/dashboard/profesional/pacientes/nuevo",
+    },
+    {
+      title: "Registrar evolución",
+      description: "Cargá una nueva evolución clínica",
+      icon: FiFileText,
+      path: "/dashboard/profesional/consultas/nueva",
+    },
+    {
+      title: "Registrar pago",
+      description: "Agregá un pago o consulta abonada",
+      icon: FiDollarSign,
+      path: "/dashboard/profesional/pagos/nuevo",
+    },
+  ]
+
   return (
-    <section>
-      <h2 className="text-xl font-semibold text-primary-dark mb-4">
-        Acciones rápidas
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <Link
-          to="/dashboard/profesional/agendar"
-          className="bg-surface border border-border-base rounded-lg p-4 hover:bg-gray-100 transition"
-        >
-          <p className="text-lg font-semibold text-primary-dark">
-            Agendar turno
-          </p>
-          <p className="text-sm text-gray-600">
-            Completa la información del paciente
-          </p>
-        </Link>
-
-        <Link
-          to="/dashboard/profesional/disponibilidad"
-          className="bg-surface border border-border-base rounded-lg p-4 hover:bg-gray-100 transition"
-        >
-          <p className="text-lg font-semibold text-primary-dark">
-            Disponibilidad semanal
-          </p>
-          <p className="text-sm text-gray-600">
-            Visualizá tu disponibilidad actual
-          </p>
-        </Link>
-
-        <Link
-          to="/dashboard/profesional/configuracion"
-          className="bg-surface border border-border-base rounded-lg p-4 hover:bg-gray-100 transition"
-        >
-          <p className="text-lg font-semibold text-primary-dark">
-            Configuración
-          </p>
-          <p className="text-sm text-gray-600">Actualizá tu perfil y datos</p>
-        </Link>
-      </div>
-    </section>
-  );
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {actions.map((action, index) => {
+        const Icon = action.icon
+        return (
+          <Card
+            key={index}
+            onClick={() => navigate(action.path)}
+            className="cursor-pointer transition hover:shadow-lg hover:scale-[1.02]"
+          >
+            <CardContent className="flex items-center gap-4 p-4">
+              <div className="p-2 rounded-full bg-primary/10 text-primary">
+                <Icon size={28} />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold">{action.title}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {action.description}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )
+      })}
+    </div>
+  )
 }
+export default QuickActions

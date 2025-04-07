@@ -1,50 +1,59 @@
-// src/dashboard/professional/patients/PatientsList.tsx
-import { useState } from 'react'
-import PatientForm from './PatientForm'
-import { usePatients } from '../hooks/usePatients'
-import { Patient } from '../types'
-
+import { useState } from "react";
+import PatientForm from "./PatientForm";
+import { usePatients } from "../hooks/usePatients";
+import { Patient } from "../types";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import Card from "../../../shared/components/ui/card/Card";
 
 interface PatientsListProps {
-  professionalId: string
+  professionalId: string;
 }
 
 export default function PatientsList({ professionalId }: PatientsListProps) {
   const { patients, loading, addPatient, updatePatient, deletePatient } =
-    usePatients(professionalId)
+    usePatients(professionalId);
 
-  const [isFormOpen, setIsFormOpen] = useState(false)
-  const [editingPatient, setEditingPatient] = useState<Patient | null>(null)
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingPatient, setEditingPatient] = useState<Patient | null>(null);
 
   const openForm = (patient?: Patient) => {
-    if (patient) setEditingPatient(patient)
-    else setEditingPatient(null)
-    setIsFormOpen(true)
-  }
+    setEditingPatient(patient || null);
+    setIsFormOpen(true);
+  };
 
   const closeForm = () => {
-    setIsFormOpen(false)
-    setEditingPatient(null)
-  }
+    setEditingPatient(null);
+    setIsFormOpen(false);
+  };
 
-  const handleSubmit = (data: Omit<Patient, 'id' | 'createdAt'>) => {
-    if (editingPatient) {
-      updatePatient(editingPatient.id!, data)
+  const handleSubmit = (
+    data: Omit<Patient, "id" | "createdAt" | "professionalId">
+  ) => {
+    if (editingPatient?.id) {
+      updatePatient(editingPatient.id, data);
     } else {
-      addPatient({ ...data, professionalId })
+      addPatient({ ...data, professionalId });
     }
-    closeForm()
-  }
+    closeForm();
+  };
 
-  if (loading) return <p className="text-sm text-gray-500">Cargando pacientes...</p>
+  const handleDelete = (patientId: string) => {
+    if (window.confirm("¿Estás seguro de que deseas eliminar este paciente?")) {
+      deletePatient(patientId);
+    }
+  };
+
+  if (loading) {
+    return <p className="text-sm text-gray-500">Cargando pacientes...</p>;
+  }
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center flex-wrap gap-2">
         <h2 className="text-lg font-semibold">Pacientes</h2>
         <button
           onClick={() => openForm()}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
         >
           + Agregar paciente
         </button>
@@ -53,37 +62,49 @@ export default function PatientsList({ professionalId }: PatientsListProps) {
       {patients.length === 0 ? (
         <p className="text-sm text-gray-500">No hay pacientes registrados.</p>
       ) : (
-        <ul className="divide-y border rounded">
-          {patients.map((patient) => (
-            <li key={patient.id} className="flex justify-between items-center p-3">
-              <div>
-                <p className="font-medium">{patient.fullName}</p>
-                <p className="text-sm text-gray-600">DNI: {patient.dni}</p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => openForm(patient)}
-                  className="text-sm text-blue-600 hover:underline"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() =>
-                    confirm('¿Eliminar este paciente?') && deletePatient(patient.id!)
-                  }
-                  className="text-sm text-red-600 hover:underline"
-                >
-                  Eliminar
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <div className="grid gap-3">
+          {patients.map((patient) => {
+            if (!patient.id) return null; // Asegura que el paciente tenga un ID
+
+            return (
+              <Card
+                key={patient.id}
+                className="flex justify-between items-start sm:items-center flex-col sm:flex-row p-4 gap-3"
+              >
+                <div>
+                  <p className="font-medium text-base">
+                    {patient.name} {patient.lastName}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    DNI: {patient.dni}
+                  </p>
+                </div>
+
+                <div className="flex gap-2 self-end sm:self-auto">
+                  <button
+                    onClick={() => openForm(patient)}
+                    className="flex items-center gap-1 text-sm text-blue-600 hover:underline"
+                  >
+                    <FiEdit2 className="text-blue-600" />
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => handleDelete(patient.id!)}
+                    className="flex items-center gap-1 text-sm text-red-600 hover:underline"
+                  >
+                    <FiTrash2 className="text-red-600" />
+                    Eliminar
+                  </button>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
       )}
 
       {isFormOpen && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded w-full max-w-md shadow-lg">
+          <div className="bg-white p-6 rounded shadow-lg max-w-md w-full overflow-y-auto">
             <PatientForm
               initialData={editingPatient || undefined}
               onSubmit={handleSubmit}
@@ -93,5 +114,5 @@ export default function PatientsList({ professionalId }: PatientsListProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

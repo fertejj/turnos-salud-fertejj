@@ -6,17 +6,18 @@ import Home from "../app/Home";
 import ProfessionalLayout from "../features/dashboard/layout/ProfessionalLayout";
 import Schedule from "../features/schedule/pages/Schedule";
 import ProfesionalDashboard from "../features/dashboard/pages/ProfesionalDashboard";
+import AddPatient from "../features/patients/pages/AddPatient";
 
 
 
 export default function AppRouter() {
   return (
     <Routes>
-      {/* Autenticación */}
+      {/* Rutas públicas */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-      {/* Inicio (redirige según rol) */}
+      {/* Ruta protegida general (redirige según rol) */}
       <Route
         path="/"
         element={
@@ -26,7 +27,7 @@ export default function AppRouter() {
         }
       />
 
-      {/* Panel profesional (layout compartido) */}
+      {/* Panel del profesional de la salud */}
       <Route
         path="/dashboard/profesional"
         element={
@@ -37,7 +38,8 @@ export default function AppRouter() {
       >
         <Route index element={<ProfesionalDashboard />} />
         <Route path="agendar" element={<Schedule />} />
+        <Route path="pacientes/nuevo" element={<AddPatient />} />
       </Route>
     </Routes>
-  );
+  )
 }
