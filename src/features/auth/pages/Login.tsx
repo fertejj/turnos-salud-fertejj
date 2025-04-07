@@ -1,16 +1,16 @@
 import { useState } from "react";
 import {
   signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
+  // GoogleAuthProvider,
+  // signInWithPopup,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { FaGoogle } from "react-icons/fa";
+// import { FaGoogle } from "react-icons/fa";
 import { auth } from "../../../services/firebase";
 import AuthLayout from "../../../shared/layout/AuthLayout";
 import Input from "../../../shared/components/Input";
 import PrimaryButton from "../../../shared/components/PrimaryButton";
-import SecondaryButton from "../../../shared/components/SecondaryButton";
+// import SecondaryButton from "../../../shared/components/SecondaryButton";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -47,19 +47,19 @@ export default function Login() {
     setLoading(false);
   };
 
-  const handleGoogleSignIn = async () => {
-    setError("");
-    setLoading(true);
-    try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      navigate("/");
-    } catch (error) {
-      setError("Error al iniciar sesión con Google.");
-      console.error("Google SignIn error:", error);
-    }
-    setLoading(false);
-  };
+  // const handleGoogleSignIn = async () => {
+  //   setError("");
+  //   setLoading(true);
+  //   try {
+  //     const provider = new GoogleAuthProvider();
+  //     await signInWithPopup(auth, provider);
+  //     navigate("/");
+  //   } catch (error) {
+  //     setError("Error al iniciar sesión con Google.");
+  //     console.error("Google SignIn error:", error);
+  //   }
+  //   setLoading(false);
+  // };
 
   return (
     <AuthLayout>
