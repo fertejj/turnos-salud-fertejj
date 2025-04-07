@@ -1,41 +1,13 @@
-// ManualAppointmentForm.tsx (versión estable sin react-input-mask)
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import {
-  collection,
-  addDoc,
-  Timestamp,
-  query,
-  where,
-  getDocs,
-  doc,
-  setDoc,
-} from "firebase/firestore";
 import toast from "react-hot-toast";
-
+import { Timestamp, collection, addDoc, query, where, getDocs, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
+
 import { useAuth } from "../../auth/context/AuthContext";
-import { db } from "../../../services/firebase";
 import PrimaryButton from "../../../shared/components/PrimaryButton";
-
-const appointmentSchema = z.object({
-  dni: z
-    .string()
-    .min(7, "El DNI debe tener al menos 7 dígitos")
-    .regex(/^\d{7,9}$/, "Formato de DNI inválido"),
-  name: z.string().min(2, "Nombre requerido"),
-  phone: z
-    .string()
-    .min(8, "Teléfono requerido")
-    .regex(/^\d{8,15}$/, "Formato de teléfono inválido"),
-  email: z.string().email("Email inválido").optional().or(z.literal("")),
-  date: z.string().min(1, "Fecha requerida"),
-  time: z.string().min(1, "Hora requerida"),
-  notes: z.string().optional(),
-});
-
-type AppointmentData = z.infer<typeof appointmentSchema>;
+import { appointmentSchema, AppointmentData } from "../schemas/appointmentSchema";
+import { getFirestoreInstance } from "../../../services/firebase/firestore";
 
 export default function ManualAppointmentForm() {
   const { user } = useAuth();
@@ -56,6 +28,7 @@ export default function ManualAppointmentForm() {
 
   const checkIfPatientExists = async () => {
     if (!dni) return;
+    const db = await getFirestoreInstance();
     const pacientesRef = collection(db, "pacientes");
     const q = query(pacientesRef, where("dni", "==", dni));
     const snapshot = await getDocs(q);
@@ -86,6 +59,7 @@ export default function ManualAppointmentForm() {
     }
 
     try {
+      const db = await getFirestoreInstance();
       const turnosRef = collection(db, "turnos");
       const qTurno = query(
         turnosRef,

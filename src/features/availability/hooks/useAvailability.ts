@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { auth, db } from "../../../services/firebase";
+import { onAuthStateChanged, type User } from "firebase/auth";
+import { getAuthInstance } from "../../../services/firebase/auth";
+import { getFirestoreInstance } from "../../../services/firebase/firestore";
 
 export type TimeSlot = {
   from: string;
@@ -10,16 +10,33 @@ export type TimeSlot = {
 };
 
 export function useAvailability() {
-  const [user] = useAuthState(auth);
+  const [user, setUser] = useState<User | null>(null);
   const [availability, setAvailability] = useState<Record<string, TimeSlot[]>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
+  // Cargar instancia de auth y detectar usuario
+  useEffect(() => {
+    const init = async () => {
+      const auth = await getAuthInstance();
+   
+
+      const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        setUser(firebaseUser);
+      });
+
+      return () => unsubscribe();
+    };
+
+    init();
+  }, []);
+
   useEffect(() => {
     const loadAvailability = async () => {
       if (!user) return;
       try {
+        const db = await getFirestoreInstance();
         const ref = doc(db, "professionals", user.uid);
         const snap = await getDoc(ref);
         if (snap.exists()) {
@@ -41,6 +58,7 @@ export function useAvailability() {
     if (!user) return;
     setSaving(true);
     try {
+      const db = await getFirestoreInstance();
       const ref = doc(db, "professionals", user.uid);
       await setDoc(ref, { availability: updated }, { merge: true });
       setAvailability(updated);

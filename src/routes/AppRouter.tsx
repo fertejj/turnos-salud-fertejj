@@ -1,31 +1,39 @@
 import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import PrivateRoute from "./PrivateRoute";
 import Spinner from "../shared/components/Spinner";
+import { ROUTES } from "./routes";
 
-// Fallback mientras se cargan los componentes
-const Loading = () => <Spinner/>
+// Spinner global
+const SpinnerFallback = (
+  <div className="h-screen flex justify-center items-center">
+    <Spinner />
+  </div>
+);
 
 // Lazy imports
 const Login = lazy(() => import("../features/auth/pages/Login"));
 const Register = lazy(() => import("../features/auth/pages/Register"));
 const Home = lazy(() => import("../app/Home"));
+const NotFound = lazy(() => import("../shared/pages/NotFound"));
+const Unauthorized = lazy(() => import("../shared/pages/Unauthorized"));
 const ProfessionalLayout = lazy(() => import("../features/dashboard/layout/ProfessionalLayout"));
 const ProfesionalDashboard = lazy(() => import("../features/dashboard/pages/ProfesionalDashboard"));
-const Schedule = lazy(() => import("../features/schedule/pages/Schedule"));
 const AddPatient = lazy(() => import("../features/patients/pages/AddPatient"));
+const CreateAppointment = lazy(() => import("../features/appointments/pages/CreateAppointment"));
+const AppointmentsList = lazy(() => import("../features/appointments/pages/AppointmentList"));
+const PrivateRoute = lazy(() => import("./PrivateRoute"));
 
 export default function AppRouter() {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={SpinnerFallback}>
       <Routes>
         {/* Rutas públicas */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path={ROUTES.login} element={<Login />} />
+        <Route path={ROUTES.register} element={<Register />} />
 
-        {/* Ruta protegida general */}
+        {/* Ruta protegida: Inicio general */}
         <Route
-          path="/"
+          path={ROUTES.home}
           element={
             <PrivateRoute>
               <Home />
@@ -33,19 +41,54 @@ export default function AppRouter() {
           }
         />
 
-        {/* Panel del profesional */}
+        {/* Dashboard profesional */}
         <Route
-          path="/dashboard/profesional"
+          path={ROUTES.dashboard.profesional}
           element={
             <PrivateRoute allowedRoles={["profesional"]}>
               <ProfessionalLayout />
             </PrivateRoute>
           }
         >
-          <Route index element={<ProfesionalDashboard />} />
-          <Route path="agendar" element={<Schedule />} />
-          <Route path="pacientes/nuevo" element={<AddPatient />} />
+          <Route
+            index
+            element={
+              <Suspense fallback={SpinnerFallback}>
+                <ProfesionalDashboard />
+              </Suspense>
+            }
+          />
+          <Route
+            path="pacientes/nuevo"
+            element={
+              <Suspense fallback={SpinnerFallback}>
+                <AddPatient />
+              </Suspense>
+            }
+          />
+          <Route
+            path="turnos/nuevo"
+            element={
+              <Suspense fallback={SpinnerFallback}>
+                <CreateAppointment />
+              </Suspense>
+            }
+          />
+          <Route
+            path="turnos"
+            element={
+              <Suspense fallback={SpinnerFallback}>
+                <AppointmentsList />
+              </Suspense>
+            }
+          />
         </Route>
+
+        {/* Ruta 403 */}
+        <Route path="/unauthorized" element={<Unauthorized />} />
+
+        {/* Ruta 404 */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );

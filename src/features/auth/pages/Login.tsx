@@ -6,10 +6,10 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 // import { FaGoogle } from "react-icons/fa";
-import { auth } from "../../../services/firebase";
 import AuthLayout from "../../../shared/layout/AuthLayout";
 import Input from "../../../shared/components/Input";
 import PrimaryButton from "../../../shared/components/PrimaryButton";
+import { getAuthInstance } from "../../../services/firebase/auth";
 // import SecondaryButton from "../../../shared/components/SecondaryButton";
 
 export default function Login() {
@@ -30,6 +30,7 @@ export default function Login() {
 
     setLoading(true);
     try {
+      const auth = await getAuthInstance(); // ✅ lazy-load de auth
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/");
     } catch (error: any) {
@@ -46,20 +47,6 @@ export default function Login() {
     }
     setLoading(false);
   };
-
-  // const handleGoogleSignIn = async () => {
-  //   setError("");
-  //   setLoading(true);
-  //   try {
-  //     const provider = new GoogleAuthProvider();
-  //     await signInWithPopup(auth, provider);
-  //     navigate("/");
-  //   } catch (error) {
-  //     setError("Error al iniciar sesión con Google.");
-  //     console.error("Google SignIn error:", error);
-  //   }
-  //   setLoading(false);
-  // };
 
   return (
     <AuthLayout>
@@ -96,17 +83,6 @@ export default function Login() {
             {loading ? "Ingresando..." : "Ingresar"}
           </PrimaryButton>
         </form>
-
-        {/* <div className="my-4 text-center text-soft">— o —</div> */}
-
-        {/* <SecondaryButton
-          onClick={handleGoogleSignIn}
-          icon={<FaGoogle className="text-xl" />}
-          type="button"
-          disabled={loading}
-        >
-          {loading ? "Cargando..." : "Ingresar con Google"}
-        </SecondaryButton> */}
       </div>
     </AuthLayout>
   );

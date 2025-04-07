@@ -2,17 +2,24 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../features/auth/context/AuthContext";
 import Spinner from "../shared/components/Spinner";
 
-type PrivateRouteProps = {
+type Role = "admin" | "profesional" | "paciente";
+
+interface PrivateRouteProps {
   children: React.ReactNode;
-  allowedRoles?: string[];
+  allowedRoles?: Role[];
+}
+
+// Type guard para validar si un string es un Role válido
+const isValidRole = (role: string): role is Role => {
+  return ["admin", "profesional", "paciente"].includes(role);
 };
 
 export default function PrivateRoute({ children, allowedRoles }: PrivateRouteProps) {
-  const { user, loading, userData } = useAuth();
+  const { user, userData, loading } = useAuth();
 
-  // Mientras se cargan los datos del usuario
+  // Esperar carga completa
   if (loading) {
-    return <Spinner/>
+    return <Spinner />;
   }
 
   // Usuario no logueado
@@ -20,11 +27,13 @@ export default function PrivateRoute({ children, allowedRoles }: PrivateRoutePro
     return <Navigate to="/login" replace />;
   }
 
-  // Usuario sin permisos para esta ruta
-  if (allowedRoles && (!userData || !allowedRoles.includes(userData.role))) {
-    return <Navigate to="/" replace />;
+  // Usuario logueado pero sin permisos
+  if (
+    allowedRoles &&
+    (!userData || !isValidRole(userData.role) || !allowedRoles.includes(userData.role))
+  ) {
+    return <Navigate to="/unauthorized" replace />;
   }
 
-  // Usuario autorizado
   return <>{children}</>;
 }

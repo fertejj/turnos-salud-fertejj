@@ -8,11 +8,11 @@ import {
   limit,
 } from "firebase/firestore";
 import { useAuth } from "../../auth/context/AuthContext";
-import { db } from "../../../services/firebase";
 import WelcomeSection from "../components/WelcomeSection";
 import NextAppointmentCard from "../components/NextAppointmentCard";
 import PatientManagement from "../components/PatientManagement";
 import QuickActions from "../components/QuickActions";
+import { getFirestoreInstance } from "../../../services/firebase/firestore";
 
 type Turno = {
   date: string;
@@ -28,6 +28,7 @@ export default function ProfesionalDashboard() {
     const fetchProximoTurno = async () => {
       if (!user) return;
 
+      const db = await getFirestoreInstance(); // ✅ usamos Firestore lazy
       const q = query(
         collection(db, "turnos"),
         where("professionalId", "==", user.uid),

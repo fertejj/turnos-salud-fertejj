@@ -16,7 +16,7 @@ const QuickActions = () => {
       title: "Nuevo turno",
       description: "Agendá una nueva consulta",
       icon: FiCalendar,
-      path: "/dashboard/profesional/crear-turno",
+      path: "/dashboard/profesional/turnos/nuevo",
     },
     {
       title: "Nuevo paciente",

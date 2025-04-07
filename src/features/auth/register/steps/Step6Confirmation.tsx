@@ -1,9 +1,10 @@
-import { auth, db } from "../../../../services/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PrimaryButton from "../../../../shared/components/PrimaryButton";
+import { getAuthInstance } from "../../../../services/firebase/auth";
+import { getFirestoreInstance } from "../../../../services/firebase/firestore";
 
 type Props = {
   formData: any;
@@ -28,6 +29,9 @@ export default function Step6Confirmation({ formData }: Props) {
     }
 
     try {
+      const auth = await getAuthInstance();
+      const db = await getFirestoreInstance();
+
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
