@@ -12,10 +12,13 @@ import {
 import { cn } from "../../../shared/utils/cn";
 import { useState } from "react";
 
-export default function SideNavBar() {
+interface SideNavBarProps {
+  hideHeader?: boolean;
+}
+
+export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
   const location = useLocation();
 
-  // Expansión de secciones
   const [showTurnos, setShowTurnos] = useState(
     location.pathname.startsWith("/dashboard/profesional/turnos")
   );
@@ -24,15 +27,15 @@ export default function SideNavBar() {
   );
 
   return (
-    <aside className="w-64 h-screen bg-surface border-r border-border shadow-sm flex flex-col justify-between">
-      <div className="p-6">
-        {/* Encabezado */}
-        <div className="mb-8">
-          <h1 className="text-xl font-bold text-primary tracking-tight">MiConsulta</h1>
-          <p className="text-xs text-muted-foreground mt-1">Panel profesional</p>
-        </div>
+    <aside className="w-full h-full bg-surface flex flex-col justify-between">
+      <div className="p-4">
+        {!hideHeader && (
+          <div className="mb-6">
+            <h1 className="text-xl font-bold text-primary tracking-tight">MiConsulta</h1>
+            <p className="text-xs text-muted-foreground mt-1">Panel profesional</p>
+          </div>
+        )}
 
-        {/* Navegación */}
         <nav className="flex flex-col gap-2 text-sm">
           {/* Inicio */}
           <NavLink
@@ -159,7 +162,6 @@ export default function SideNavBar() {
         </nav>
       </div>
 
-      {/* Footer */}
       <div className="p-4 text-xs text-muted-foreground border-t border-border">
         © 2025 MiConsulta
       </div>
