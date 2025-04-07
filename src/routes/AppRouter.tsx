@@ -5,7 +5,6 @@ import Register from "../features/auth/pages/Register";
 import Home from "../app/Home";
 import ProfessionalLayout from "../features/dashboard/layout/ProfessionalLayout";
 import Schedule from "../features/schedule/pages/Schedule";
-import AdminDashboard from "../features/dashboard/pages/AdminDashboard";
 import ProfesionalDashboard from "../features/dashboard/pages/ProfesionalDashboard";
 
 
@@ -39,16 +38,6 @@ export default function AppRouter() {
         <Route index element={<ProfesionalDashboard />} />
         <Route path="agendar" element={<Schedule />} />
       </Route>
-
-      {/* Panel administrador */}
-      <Route
-        path="/dashboard/admin"
-        element={
-          <PrivateRoute allowedRoles={["admin"]}>
-            <AdminDashboard />
-          </PrivateRoute>
-        }
-      />
     </Routes>
   );
 }

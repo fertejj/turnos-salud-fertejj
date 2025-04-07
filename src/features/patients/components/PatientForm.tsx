@@ -1,6 +1,6 @@
 // src/dashboard/professional/patients/PatientForm.tsx
 import { useState } from 'react'
-import { Patient } from '../../../../types/patient'
+import { Patient } from '../types'
 
 interface PatientFormProps {
   initialData?: Patient

@@ -15,26 +15,50 @@ import SecondaryButton from "../../../shared/components/SecondaryButton";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
+    if (!email || !password) {
+      setError("Por favor, completá todos los campos.");
+      return;
+    }
+
+    setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/");
-    } catch (error) {
-      console.error("Error al iniciar sesión:", error);
+    } catch (error: any) {
+      switch (error.code) {
+        case "auth/user-not-found":
+          setError("Usuario no encontrado.");
+          break;
+        case "auth/wrong-password":
+          setError("Contraseña incorrecta.");
+          break;
+        default:
+          setError("Ocurrió un error al iniciar sesión.");
+      }
     }
+    setLoading(false);
   };
 
   const handleGoogleSignIn = async () => {
+    setError("");
+    setLoading(true);
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
       navigate("/");
     } catch (error) {
-      console.error("Error con Google:", error);
+      setError("Error al iniciar sesión con Google.");
+      console.error("Google SignIn error:", error);
     }
+    setLoading(false);
   };
 
   return (
@@ -47,20 +71,41 @@ export default function Login() {
             placeholder="Correo electrónico"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            aria-label="Correo electrónico"
+            hasError={!!error && (!email || error.toLowerCase().includes("usuario"))}
           />
           <Input
             type="password"
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            aria-label="Contraseña"
+            hasError={!!error && (!password || error.toLowerCase().includes("contraseña"))}
           />
-          <PrimaryButton type="submit">Ingresar</PrimaryButton>
+          {error && <p className="text-sm text-red-500 -mt-2">{error}</p>}
+          <div className="text-right text-sm">
+            <button
+              type="button"
+              className="text-blue-600 hover:underline"
+              onClick={() => navigate("/recuperar")}
+            >
+              ¿Olvidaste tu contraseña?
+            </button>
+          </div>
+          <PrimaryButton type="submit" disabled={loading}>
+            {loading ? "Ingresando..." : "Ingresar"}
+          </PrimaryButton>
         </form>
 
         <div className="my-4 text-center text-soft">— o —</div>
 
-        <SecondaryButton onClick={handleGoogleSignIn} icon={<FaGoogle className="text-xl" />}>
-          Ingresar con Google
+        <SecondaryButton
+          onClick={handleGoogleSignIn}
+          icon={<FaGoogle className="text-xl" />}
+          type="button"
+          disabled={loading}
+        >
+          {loading ? "Cargando..." : "Ingresar con Google"}
         </SecondaryButton>
       </div>
     </AuthLayout>

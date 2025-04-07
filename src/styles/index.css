@@ -1,19 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-        --color-primary: #f59e0b;
-        --color-primary-dark: #d97706;
-        --color-primary-light: #fef3c7;
-        --color-success: #16a34a;
-        --color-light: #dcfce7;
-        --color-warning:#facc15;
-        --color-light: #fef9c3;
-        --color-text: #1f2937;
-        --color-text-soft: #6b7280; 
-        --color-background: #f9fafb;
-        --color-surface: #ffffff;
-        --colorcard-bg: #ffffff;
-        --color-border-base: #e5e7eb;
-        --color-hover-surface: #f3f4f6;
-    }
+  --color-primary: #2b7a78;         /* Verde azulado (confianza, estabilidad) */
+  --color-primary-dark: #205e5c;    /* Más oscuro para hover o elementos fuertes */
+  --color-primary-light: #def2f1;   /* Fondo suave, headers claros */
+
+  --color-success: #3cb371;         /* Éxito - verde salud */
+  --color-warning: #f4a261;         /* Advertencias suaves */
+  --color-error: #e76f51;           /* Errores visibles pero no agresivos */
+
+  --color-text: #1f2937;            /* Texto principal */
+  --color-text-soft: #6b7280;       /* Texto secundario */
   
+  --color-background: #f0fdf4;      /* Fondo general claro y tranquilo */
+  --color-surface: #ffffff;         /* Fondo de tarjetas / componentes */
+  --colorcard-bg: #ffffff;
+
+  --color-border-base: #e5e7eb;     /* Bordes neutros */
+  --color-hover-surface: #f1f5f9;   /* Hover cards / botones suaves */
+}
