@@ -9,24 +9,15 @@ export default function ProfessionalLayout() {
 
   return (
     <div className="flex min-h-screen bg-background text-text">
-      {/* Botón toggle (visible en tamaños menores a lg) */}
+      {/* Botón toggle para mobile */}
       <SidebarToggle isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
-      {/* Sidebar para desktop (lg en adelante) */}
-      <aside
-        className={`
-          hidden lg:block
-          transition-all duration-300 ease-in-out 
-          ${isSidebarOpen ? "w-64" : "w-0"} 
-          overflow-hidden 
-          bg-surface 
-          border-r border-border
-        `}
-      >
+      {/* Sidebar fijo en desktop */}
+      <aside className="hidden lg:flex w-64 bg-surface border-r border-border flex-col">
         <SideNavBar />
       </aside>
 
-      {/* Sidebar responsivo en mobile/tablet */}
+      {/* Sidebar responsivo animado en mobile */}
       <ResponsiveSidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
       {/* Contenido principal */}

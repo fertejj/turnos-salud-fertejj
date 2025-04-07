@@ -1,4 +1,4 @@
-import { Menu, X } from "react-feather";
+import { Menu } from "lucide-react";
 
 interface SidebarToggleProps {
   isOpen: boolean;
@@ -9,10 +9,10 @@ export default function SidebarToggle({ isOpen, setIsOpen }: SidebarToggleProps)
   return (
     <button
       onClick={() => setIsOpen(!isOpen)}
-      className="lg:hidden fixed top-4 left-4 p-2 rounded-lg bg-surface shadow-md z-0"
-      aria-label="Toggle Sidebar"
+      className="lg:hidden fixed top-4 left-4 z-0 p-2 rounded-lg bg-surface shadow-md"
+      aria-label="Abrir menú"
     >
-      {isOpen ? <X size={20} /> : <Menu size={20} />}
+      <Menu size={20} />
     </button>
   );
 }
