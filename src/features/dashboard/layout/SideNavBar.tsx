@@ -40,7 +40,7 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
   );
 
   return (
-    <aside className="w-full h-full bg-surface flex flex-col justify-between">
+    <aside className="w-full h-full bg-surface flex flex-col justify-between border-r border-border shadow-sm">
       <div className="p-5">
         {!hideHeader && (
           <div className="mb-6">
@@ -49,10 +49,10 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
           </div>
         )}
 
-        <nav className="flex flex-col gap-4 text-sm">
+        <nav className="flex flex-col gap-6 text-sm">
           {navItems.map((section) => (
             <div key={section.label} className="flex flex-col gap-2">
-              <span className="text-xs font-semibold text-muted-foreground px-4 tracking-wide uppercase">
+              <span className="text-[11px] font-semibold text-muted-foreground px-4 tracking-wider uppercase">
                 {section.label}
               </span>
 
@@ -67,10 +67,10 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
                         }))
                       }
                       className={cn(
-                        "flex items-center justify-between w-full px-4 py-2 rounded-lg font-medium transition-colors relative group",
+                        "flex items-center justify-between w-full px-4 py-2.5 rounded-xl font-medium transition-all relative group",
                         location.pathname.startsWith(item.path)
                           ? "bg-primary text-white shadow"
-                          : "hover:bg-accent hover:text-primary text-text"
+                          : "hover:bg-muted/60 hover:text-primary text-text"
                       )}
                       aria-expanded={expanded[item.path]}
                     >
@@ -94,7 +94,7 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="overflow-hidden flex flex-col gap-1 pl-10 mt-1"
+                          className="overflow-hidden flex flex-col gap-1 pl-8 mt-1 border-l border-border/40"
                         >
                           {item.children.map((child: NavLinkItem) => (
                             <NavLink
@@ -103,14 +103,14 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
                               end={child.exact}
                               className={({ isActive }) =>
                                 cn(
-                                  "flex items-center gap-2 px-2 py-1 rounded-md transition text-sm relative group",
+                                  "flex items-center gap-2 px-3 py-1.5 rounded-md transition text-sm relative group",
                                   isActive
-                                    ? "bg-primary text-white font-medium shadow-sm"
-                                    : "hover:bg-accent hover:text-primary text-text"
+                                    ? "bg-primary/90 text-white font-semibold shadow"
+                                    : "hover:bg-muted/50 hover:text-primary text-muted-foreground"
                                 )
                               }
                             >
-                              <child.icon size={16} />
+                              <child.icon size={15} />
                               {child.label}
                             </NavLink>
                           ))}
@@ -125,10 +125,10 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
                     end={item.exact}
                     className={({ isActive }) =>
                       cn(
-                        "relative flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition-colors group",
+                        "relative flex items-center gap-3 px-4 py-2.5 rounded-xl font-medium transition-colors group",
                         isActive
                           ? "bg-primary text-white shadow"
-                          : "hover:bg-accent hover:text-primary text-text"
+                          : "hover:bg-muted/60 hover:text-primary text-text"
                       )
                     }
                   >
@@ -152,7 +152,7 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
         </nav>
       </div>
 
-      <div className="p-4 text-xs text-muted-foreground border-t border-border">
+      <div className="p-4 text-xs text-muted-foreground border-t border-border text-center">
         © 2025 MiConsulta
       </div>
     </aside>
