@@ -1,4 +1,3 @@
-// src/lib/firebase/auth.ts
 import { firebaseConfig } from "./config";
 
 export const getAuthInstance = async () => {

@@ -1,10 +1,12 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, LogOut, UserCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "../../../shared/utils/cn";
 import { navItems } from "../components/navItems";
 import { NavLinkItem, NavSectionItem } from "../types/nav";
+import { getAuthInstance } from "../../../services/firebase/auth";
+import type { User } from "firebase/auth";
 
 interface SideNavBarProps {
   hideHeader?: boolean;
@@ -12,7 +14,36 @@ interface SideNavBarProps {
 
 export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    let unsubscribe: () => void;
+
+    const initAuth = async () => {
+      const auth = await getAuthInstance();
+      unsubscribe = auth.onAuthStateChanged((user) => {
+        setCurrentUser(user);
+      });
+    };
+
+    initAuth();
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    const auth = await getAuthInstance();
+    try {
+      await auth.signOut();
+      navigate("/login");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
 
   useEffect(() => {
     const newExpanded: Record<string, boolean> = {};
@@ -46,6 +77,20 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
           <div className="mb-6">
             <h1 className="text-xl font-bold text-primary tracking-tight">MiConsulta</h1>
             <p className="text-xs text-muted-foreground mt-1">Panel profesional</p>
+          </div>
+        )}
+
+        {currentUser && (
+          <div className="flex items-center gap-3 mb-6 px-1">
+            <UserCircle size={28} className="text-primary" />
+            <div className="leading-tight">
+              <p className="text-sm font-medium text-text">
+                {currentUser.displayName || "Usuario"}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {currentUser.email}
+              </p>
+            </div>
           </div>
         )}
 
@@ -152,8 +197,17 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
         </nav>
       </div>
 
-      <div className="p-4 text-xs text-muted-foreground border-t border-border text-center">
-        © 2025 MiConsulta
+      <div className="p-4 border-t border-border">
+        <button
+          onClick={handleLogout}
+          className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition p-2 rounded-md w-full"
+        >
+          <LogOut size={16} />
+          Cerrar sesión
+        </button>
+        <p className="text-[11px] text-muted-foreground mt-3 text-center">
+          © 2025 MiConsulta
+        </p>
       </div>
     </aside>
   );
