@@ -71,7 +71,7 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
   );
 
   return (
-    <aside className="w-full h-full bg-surface flex flex-col justify-between border-r border-border shadow-sm">
+    <aside className="w-full h-full bg-surface flex flex-col justify-between  shadow-sm">
       <div className="p-5">
         {!hideHeader && (
           <div className="mb-6">
@@ -139,7 +139,7 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="overflow-hidden flex flex-col gap-1 pl-8 mt-1 border-l border-border/40"
+                          className="overflow-hidden flex flex-col gap-1 pl-8 mt-1"
                         >
                           {item.children.map((child: NavLinkItem) => (
                             <NavLink
