@@ -1,13 +1,15 @@
 import SideNavBar from "./SideNavBar";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ProfessionalUser } from "../types/user";
 
 interface ResponsiveSidebarProps {
   isOpen: boolean;
+  userData: ProfessionalUser | null;
   setIsOpen: (value: boolean) => void;
 }
 
-export default function ResponsiveSidebar({ isOpen, setIsOpen }: ResponsiveSidebarProps) {
+export default function ResponsiveSidebar({ isOpen, setIsOpen, userData }: ResponsiveSidebarProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -43,8 +45,7 @@ export default function ResponsiveSidebar({ isOpen, setIsOpen }: ResponsiveSideb
 
             {/* Contenido del menú */}
             <div className="flex-1 overflow-y-auto">
-              <SideNavBar hideHeader />
-            </div>
+            <SideNavBar hideHeader userData={userData} />            </div>
           </motion.aside>
         </motion.div>
       )}

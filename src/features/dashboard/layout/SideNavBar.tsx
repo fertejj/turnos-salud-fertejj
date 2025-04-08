@@ -5,64 +5,17 @@ import { useState, useEffect } from "react";
 import { cn } from "../../../shared/utils/cn";
 import { navItems } from "../components/navItems";
 import { NavLinkItem, NavSectionItem } from "../types/nav";
-import { getAuthInstance } from "../../../services/firebase/auth";
-import { getUserByUID } from "../services/userService";
 import type { ProfessionalUser } from "../types/user";
 
 interface SideNavBarProps {
   hideHeader?: boolean;
+  userData: ProfessionalUser | null;
 }
 
-export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
+export default function SideNavBar({ hideHeader = false, userData }: SideNavBarProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const [userData, setUserData] = useState<ProfessionalUser | null>(null);
-  const [loadingUserData, setLoadingUserData] = useState(true);
-
-  useEffect(() => {
-    let unsubscribe: () => void;
-
-    const initAuth = async () => {
-      const auth = await getAuthInstance();
-      unsubscribe = auth.onAuthStateChanged(async (user) => {
-
-        if (user) {
-          try {
-            const data = await getUserByUID(user.uid);
-            if (data) {
-              console.log("Usuario encontrado en Firestore:", data);
-              setUserData(data);
-            } else {
-              console.warn("No se encontró el usuario en Firestore para el UID:", user.uid);
-            }
-          } catch (error) {
-            console.error("Error al obtener el usuario de Firestore:", error);
-          } finally {
-            setLoadingUserData(false);
-          }
-        } else {
-          setLoadingUserData(false);
-        }
-      });
-    };
-
-    initAuth();
-
-    return () => {
-      if (unsubscribe) unsubscribe();
-    };
-  }, []);
-
-  const handleLogout = async () => {
-    const auth = await getAuthInstance();
-    try {
-      await auth.signOut();
-      navigate("/login");
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-    }
-  };
 
   useEffect(() => {
     const newExpanded: Record<string, boolean> = {};
@@ -78,6 +31,17 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
     );
     setExpanded((prev) => ({ ...prev, ...newExpanded }));
   }, [location.pathname]);
+
+  const handleLogout = async () => {
+    const { getAuthInstance } = await import("../../../services/firebase/auth");
+    const auth = await getAuthInstance();
+    try {
+      await auth.signOut();
+      navigate("/login");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
 
   const ChevronAnimated = ({ open }: { open: boolean }) => (
     <motion.div
@@ -99,7 +63,7 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
           </div>
         )}
 
-        {!loadingUserData && userData && (
+        {userData && (
           <div className="flex items-center gap-3 mb-6 px-1">
             <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-white font-semibold text-sm">
               {userData.name?.charAt(0).toUpperCase() || "U"}

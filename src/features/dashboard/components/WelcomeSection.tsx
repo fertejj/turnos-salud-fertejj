@@ -1,15 +1,15 @@
-import { User } from "firebase/auth";
+import type { ProfessionalUser } from "../types/user";
 
 type Props = {
-  user: User | null;
+  user: ProfessionalUser | null;
 };
 
 export default function WelcomeSection({ user }: Props) {
-  const displayName = user?.displayName || "Profesional";
+  const displayName = user?.name || "Profesional";
 
   return (
     <section className="bg-primary-light border border-primary/20 rounded-xl p-6 flex items-center gap-4 shadow-sm">
-      {/* Avatar o ícono */}
+      {/* Avatar o inicial */}
       <div className="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center text-2xl">
         {displayName.charAt(0).toUpperCase()}
       </div>

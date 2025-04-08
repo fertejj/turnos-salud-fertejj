@@ -7,12 +7,13 @@ import {
   orderBy,
   limit,
 } from "firebase/firestore";
-import { useAuth } from "../../auth/context/AuthContext";
+import { useOutletContext } from "react-router-dom";
 import WelcomeSection from "../components/WelcomeSection";
 import NextAppointmentCard from "../components/NextAppointmentCard";
 import PatientManagement from "../components/PatientManagement";
 import QuickActions from "../components/QuickActions";
 import { getFirestoreInstance } from "../../../services/firebase/firestore";
+import type { ProfessionalUser } from "../types/user";
 
 type Turno = {
   date: string;
@@ -21,17 +22,17 @@ type Turno = {
 };
 
 export default function ProfesionalDashboard() {
-  const { user } = useAuth();
+  const { userData } = useOutletContext<{ userData: ProfessionalUser | null }>();
   const [proxTurno, setProxTurno] = useState<Turno | null>(null);
 
   useEffect(() => {
     const fetchProximoTurno = async () => {
-      if (!user) return;
+      if (!userData?.id) return;
 
-      const db = await getFirestoreInstance(); // ✅ usamos Firestore lazy
+      const db = await getFirestoreInstance();
       const q = query(
         collection(db, "turnos"),
-        where("professionalId", "==", user.uid),
+        where("professionalId", "==", userData.id),
         orderBy("date"),
         orderBy("time"),
         limit(1)
@@ -43,16 +44,16 @@ export default function ProfesionalDashboard() {
     };
 
     fetchProximoTurno();
-  }, [user]);
+  }, [userData]);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-10">
-      <WelcomeSection user={user} />
+      <WelcomeSection user={userData} />
       <NextAppointmentCard appointment={proxTurno} />
       <hr className="border-border-base" />
       <QuickActions />
       <hr className="border-border-base" />
-      {user && <PatientManagement professionalId={user.uid} />}
+      {userData?.id && <PatientManagement professionalId={userData.id} />}
     </div>
   );
 }
