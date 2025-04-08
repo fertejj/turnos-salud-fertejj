@@ -18,6 +18,7 @@ type Appointment = {
   note?: string;
   patient?: {
     name: string;
+    dni?: string;
     email: string;
   };
 };
@@ -28,6 +29,7 @@ export default function AppointmentsList() {
   const [loading, setLoading] = useState(true);
   const [filterDate, setFilterDate] = useState("");
   const [patientQuery, setPatientQuery] = useState("");
+  const [dniQuery, setDniQuery] = useState("");
 
   useEffect(() => {
     if (!user) return;
@@ -87,7 +89,11 @@ export default function AppointmentsList() {
       ? appt.patient?.name.toLowerCase().includes(patientQuery.toLowerCase())
       : true;
 
-    return matchesDate && matchesPatient;
+    const matchesDni = dniQuery
+      ? appt.patient?.dni?.includes(dniQuery)
+      : true;
+
+    return matchesDate && matchesPatient && matchesDni;
   });
 
   return (
@@ -96,9 +102,11 @@ export default function AppointmentsList() {
 
       <AppointmentsFilters
         filterDate={filterDate}
-        onDateChange={(e: any) => setFilterDate(e.target.value)}
+        onDateChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterDate(e.target.value)}
         patientQuery={patientQuery}
-        onPatientQueryChange={(e: any) => setPatientQuery(e.target.value)}
+        onPatientQueryChange={(e: React.ChangeEvent<HTMLInputElement>) => setPatientQuery(e.target.value)}
+        dniQuery={dniQuery}
+        onDniQueryChange={(e: React.ChangeEvent<HTMLInputElement>) => setDniQuery(e.target.value)}
       />
 
       {loading ? (
@@ -111,20 +119,25 @@ export default function AppointmentsList() {
             <ProCard
               key={appt.id}
               title={appt.patient?.name || "Paciente desconocido"}
-              actions={
-                <button className="text-sm text-primary hover:underline">Ver detalle</button>
-              }
               subtitle={appt.date.toDate().toLocaleString("es-AR", {
                 dateStyle: "medium",
                 timeStyle: "short",
               })}
+              actions={
+                <button className="text-sm text-primary hover:underline">
+                  Ver detalle
+                </button>
+              }
             >
               {appt.note && (
                 <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-text">Nota:</span>{" "}
-                  {appt.note}
+                  <span className="font-medium text-text">Nota:</span> {appt.note}
                 </p>
               )}
+              <p className="text-sm text-muted-foreground">
+                <span className="font-medium text-text">DNI:</span>{" "}
+                {appt.patient?.dni ?? "No informado"}
+              </p>
             </ProCard>
           ))}
         </ul>

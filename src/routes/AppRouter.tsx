@@ -2,6 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Spinner from "../shared/components/Spinner";
 import { ROUTES } from "./routes";
+import PatientList from "../features/patients/pages/PatientList";
+import PatientEditPage from "../features/patients/pages/PatientEditPage";
 
 // Spinner global
 const SpinnerFallback = (
@@ -22,7 +24,7 @@ const AddPatient = lazy(() => import("../features/patients/pages/AddPatient"));
 const CreateAppointment = lazy(() => import("../features/appointments/pages/CreateAppointment"));
 const AppointmentsList = lazy(() => import("../features/appointments/pages/AppointmentList"));
 const PrivateRoute = lazy(() => import("./PrivateRoute"));
-const PublicRoute = lazy(() => import("./PublicRoute")); // 🚨 agregado
+const PublicRoute = lazy(() => import("./PublicRoute"));
 
 export default function AppRouter() {
   return (
@@ -81,6 +83,23 @@ export default function AppRouter() {
               </Suspense>
             }
           />
+          <Route
+            path="pacientes"
+            element={
+              <Suspense fallback={SpinnerFallback}>
+                <PatientList />
+              </Suspense>
+            }
+          />
+          <Route
+            path="pacientes/:id"
+            element={
+              <Suspense fallback={SpinnerFallback}>
+                <PatientEditPage />
+              </Suspense>
+            }
+          />
+
           <Route
             path="turnos/nuevo"
             element={
