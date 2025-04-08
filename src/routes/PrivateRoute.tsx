@@ -2,7 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../features/auth/context/AuthContext";
 import Spinner from "../shared/components/Spinner";
 
-type Role = "admin" | "profesional" | "paciente";
+type Role = "admin" | "profesional" ;
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ interface PrivateRouteProps {
 
 // Type guard para validar si un string es un Role válido
 const isValidRole = (role: string): role is Role => {
-  return ["admin", "profesional", "paciente"].includes(role);
+  return ["admin", "profesional"].includes(role);
 };
 
 export default function PrivateRoute({ children, allowedRoles }: PrivateRouteProps) {

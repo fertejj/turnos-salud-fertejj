@@ -22,14 +22,29 @@ const AddPatient = lazy(() => import("../features/patients/pages/AddPatient"));
 const CreateAppointment = lazy(() => import("../features/appointments/pages/CreateAppointment"));
 const AppointmentsList = lazy(() => import("../features/appointments/pages/AppointmentList"));
 const PrivateRoute = lazy(() => import("./PrivateRoute"));
+const PublicRoute = lazy(() => import("./PublicRoute")); // 🚨 agregado
 
 export default function AppRouter() {
   return (
     <Suspense fallback={SpinnerFallback}>
       <Routes>
-        {/* Rutas públicas */}
-        <Route path={ROUTES.login} element={<Login />} />
-        <Route path={ROUTES.register} element={<Register />} />
+        {/* Rutas públicas protegidas para usuarios logueados */}
+        <Route
+          path={ROUTES.login}
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path={ROUTES.register}
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
 
         {/* Ruta protegida: Inicio general */}
         <Route
