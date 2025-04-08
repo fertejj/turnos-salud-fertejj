@@ -3,13 +3,12 @@ import {
   FiCalendar,
   FiFileText,
   FiDollarSign,
-} from "react-icons/fi"
-import { useNavigate } from "react-router-dom"
-import CardContent from "../../../shared/components/ui/card/CardContent"
-import Card from "../../../shared/components/ui/card/Card"
+} from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import ProCard from "../../../shared/components/ui/card/ProCard";
 
 const QuickActions = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const actions = [
     {
@@ -36,33 +35,29 @@ const QuickActions = () => {
       icon: FiDollarSign,
       path: "/dashboard/profesional/pagos/nuevo",
     },
-  ]
+  ];
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {actions.map((action, index) => {
-        const Icon = action.icon
+        const Icon = action.icon;
         return (
-          <Card
+          <ProCard
             key={index}
+            title={action.title}
+            subtitle={action.description}
             onClick={() => navigate(action.path)}
-            className="cursor-pointer transition hover:shadow-lg hover:scale-[1.02]"
-          >
-            <CardContent className="flex items-center gap-4 p-4">
+            className="cursor-pointer hover:shadow-lg hover:scale-[1.02] transition"
+            headerRight={
               <div className="p-2 rounded-full bg-primary/10 text-primary">
-                <Icon size={28} />
+                <Icon size={24} />
               </div>
-              <div>
-                <h3 className="text-lg font-semibold">{action.title}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {action.description}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        )
+            }
+          />
+        );
       })}
     </div>
-  )
-}
-export default QuickActions
+  );
+};
+
+export default QuickActions;

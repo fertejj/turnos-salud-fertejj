@@ -9,6 +9,7 @@ import {
 import { useAuth } from "../../auth/context/AuthContext";
 import AppointmentsFilters from "../components/AppointmentFilters";
 import { getFirestoreInstance } from "../../../services/firebase/firestore";
+import ProCard from "../../../shared/components/ui/card/ProCard";
 
 type Appointment = {
   id: string;
@@ -37,7 +38,10 @@ export default function AppointmentsList() {
         const db = await getFirestoreInstance();
 
         const patientsSnap = await getDocs(
-          query(collection(db, "patients"), where("professionalId", "==", user.uid))
+          query(
+            collection(db, "patients"),
+            where("professionalId", "==", user.uid)
+          )
         );
 
         const patients = patientsSnap.docs.map((doc) => ({
@@ -104,30 +108,24 @@ export default function AppointmentsList() {
       ) : (
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredAppointments.map((appt) => (
-            <li
+            <ProCard
               key={appt.id}
-              className="bg-surface border border-border rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow"
+              title={appt.patient?.name || "Paciente desconocido"}
+              actions={
+                <button className="text-sm text-primary hover:underline">Ver detalle</button>
+              }
+              subtitle={appt.date.toDate().toLocaleString("es-AR", {
+                dateStyle: "medium",
+                timeStyle: "short",
+              })}
             >
-              <h3 className="text-base font-semibold text-primary mb-2">
-                {appt.patient?.name || "Paciente desconocido"}
-              </h3>
-
-              <div className="text-sm space-y-1 text-text">
-                <p>
-                  <span className="font-medium">Fecha:</span>{" "}
-                  {appt.date.toDate().toLocaleString("es-AR", {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  })}
+              {appt.note && (
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-medium text-text">Nota:</span>{" "}
+                  {appt.note}
                 </p>
-
-                {appt.note && (
-                  <p>
-                    <span className="font-medium">Nota:</span> {appt.note}
-                  </p>
-                )}
-              </div>
-            </li>
+              )}
+            </ProCard>
           ))}
         </ul>
       )}

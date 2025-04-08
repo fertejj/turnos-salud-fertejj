@@ -31,6 +31,7 @@ export default function SideNavBar({ hideHeader = false, userData }: SideNavBarP
     );
     setExpanded((prev) => ({ ...prev, ...newExpanded }));
   }, [location.pathname]);
+
   const handleLogout = async () => {
     const { getAuthInstance } = await import("../../../services/firebase/auth");
     const auth = await getAuthInstance();
@@ -45,7 +46,7 @@ export default function SideNavBar({ hideHeader = false, userData }: SideNavBarP
   const ChevronAnimated = ({ open }: { open: boolean }) => (
     <motion.div
       animate={{ rotate: open ? 90 : 0 }}
-      transition={{ duration: 0.2 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className="flex items-center justify-center"
     >
       <ChevronRight size={16} />
@@ -53,7 +54,7 @@ export default function SideNavBar({ hideHeader = false, userData }: SideNavBarP
   );
 
   return (
-    <aside className="w-full h-[100vh] bg-surface flex flex-col justify-between shadow-sm">
+    <aside className="w-full h-full bg-surface flex flex-col justify-between shadow-sm">
       <div className="p-5">
         {!hideHeader && (
           <div className="mb-6">
@@ -92,7 +93,7 @@ export default function SideNavBar({ hideHeader = false, userData }: SideNavBarP
                         }))
                       }
                       className={cn(
-                        "flex items-center justify-between w-full px-4 py-2.5 rounded-xl font-medium transition-all relative group",
+                        "relative flex items-center justify-between w-full px-4 py-2.5 rounded-xl font-medium transition-all group",
                         location.pathname.startsWith(item.path)
                           ? "bg-primary text-white shadow"
                           : "hover:bg-muted/60 hover:text-primary text-text"
@@ -102,7 +103,7 @@ export default function SideNavBar({ hideHeader = false, userData }: SideNavBarP
                       {location.pathname.startsWith(item.path) && (
                         <motion.span
                           layoutId="active-indicator"
-                          className="absolute inset-y-1 left-0 w-[4px] bg-primary rounded-r-md z-10 translate-x-[-1px]"
+                          className="absolute top-1 bottom-1 left-0 w-[4px] bg-primary rounded-r-full z-10"
                         />
                       )}
                       <span className="flex items-center gap-3">
@@ -114,32 +115,42 @@ export default function SideNavBar({ hideHeader = false, userData }: SideNavBarP
 
                     <AnimatePresence initial={false}>
                       {expanded[item.path] && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.2 }}
+                        <motion.ul
+                          initial={{ x: -10, opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
+                          exit={{ x: -10, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
                           className="overflow-hidden flex flex-col gap-1 pl-8 mt-1"
                         >
                           {item.children.map((child: NavLinkItem) => (
-                            <NavLink
-                              key={child.label}
-                              to={child.path}
-                              end={child.exact}
-                              className={({ isActive }) =>
-                                cn(
-                                  "flex items-center gap-2 px-3 py-1.5 rounded-md transition text-sm relative group",
-                                  isActive
-                                    ? "bg-primary/90 text-white font-semibold shadow"
-                                    : "hover:bg-muted/50 hover:text-primary text-muted-foreground"
-                                )
-                              }
-                            >
-                              <child.icon size={15} />
-                              {child.label}
-                            </NavLink>
+                            <motion.li key={child.label} layout>
+                              <NavLink
+                                to={child.path}
+                                end={child.exact}
+                                className={({ isActive }) =>
+                                  cn(
+                                    "relative flex items-center gap-2 px-3 py-1.5 rounded-md transition text-sm group",
+                                    isActive
+                                      ? "bg-primary/90 text-white font-semibold shadow"
+                                      : "hover:bg-muted/50 hover:text-primary text-muted-foreground"
+                                  )
+                                }
+                              >
+                                {({ isActive }) => (
+                                  <>
+                                    {isActive && (
+                                      <motion.span
+                                        layoutId="active-indicator"
+                                        className="absolute top-1 bottom-1 left-0 w-[4px] bg-primary rounded-r-full z-10"
+                                      />
+                                    )}
+                                    {child.label}
+                                  </>
+                                )}
+                              </NavLink>
+                            </motion.li>
                           ))}
-                        </motion.div>
+                        </motion.ul>
                       )}
                     </AnimatePresence>
                   </div>
@@ -162,7 +173,7 @@ export default function SideNavBar({ hideHeader = false, userData }: SideNavBarP
                         {isActive && (
                           <motion.span
                             layoutId="active-indicator"
-                            className="absolute inset-y-1 left-0 w-[4px] bg-primary rounded-r-md z-10 translate-x-[-1px]"
+                            className="absolute top-1 bottom-1 left-0 w-[4px] bg-primary rounded-r-full z-10"
                           />
                         )}
                         <item.icon size={18} />
