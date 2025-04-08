@@ -9,7 +9,14 @@ interface ResponsiveSidebarProps {
   setIsOpen: (value: boolean) => void;
 }
 
-export default function ResponsiveSidebar({ isOpen, setIsOpen, userData }: ResponsiveSidebarProps) {
+export default function ResponsiveSidebar({
+  isOpen,
+  setIsOpen,
+  userData,
+}: ResponsiveSidebarProps) {
+
+
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -19,7 +26,7 @@ export default function ResponsiveSidebar({ isOpen, setIsOpen, userData }: Respo
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+          className=" fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         >
           <motion.aside
@@ -45,7 +52,8 @@ export default function ResponsiveSidebar({ isOpen, setIsOpen, userData }: Respo
 
             {/* Contenido del menú */}
             <div className="flex-1 overflow-y-auto">
-            <SideNavBar hideHeader userData={userData} />            </div>
+              <SideNavBar hideHeader userData={userData} />{" "}
+            </div>
           </motion.aside>
         </motion.div>
       )}

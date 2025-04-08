@@ -31,7 +31,6 @@ export default function SideNavBar({ hideHeader = false, userData }: SideNavBarP
     );
     setExpanded((prev) => ({ ...prev, ...newExpanded }));
   }, [location.pathname]);
-
   const handleLogout = async () => {
     const { getAuthInstance } = await import("../../../services/firebase/auth");
     const auth = await getAuthInstance();
@@ -54,7 +53,7 @@ export default function SideNavBar({ hideHeader = false, userData }: SideNavBarP
   );
 
   return (
-    <aside className="w-full h-full bg-surface flex flex-col justify-between shadow-sm">
+    <aside className="w-full h-[100vh] bg-surface flex flex-col justify-between shadow-sm">
       <div className="p-5">
         {!hideHeader && (
           <div className="mb-6">

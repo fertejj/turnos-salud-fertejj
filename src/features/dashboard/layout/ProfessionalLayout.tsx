@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import SideNavBar from "./SideNavBar";
 import SidebarToggle from "./SidebarToggle";
 import ResponsiveSidebar from "./ResponsiveSidebar";
 import { getAuthInstance } from "../../../services/firebase/auth";
@@ -46,9 +45,6 @@ export default function ProfessionalLayout() {
       <SidebarToggle isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
       {/* Sidebar fijo en desktop */}
-      <aside className="hidden lg:flex w-64 bg-surface border-r border-border flex-col">
-        <SideNavBar userData={userData} />
-      </aside>
 
       {/* Sidebar responsivo animado en mobile */}
       <ResponsiveSidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} userData={userData} />
