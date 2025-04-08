@@ -1,12 +1,13 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, LogOut, UserCircle } from "lucide-react";
+import { ChevronRight, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 import { cn } from "../../../shared/utils/cn";
 import { navItems } from "../components/navItems";
 import { NavLinkItem, NavSectionItem } from "../types/nav";
 import { getAuthInstance } from "../../../services/firebase/auth";
-import type { User } from "firebase/auth";
+import { getUserByUID } from "../services/userService";
+import type { ProfessionalUser } from "../types/user";
 
 interface SideNavBarProps {
   hideHeader?: boolean;
@@ -16,15 +17,33 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [userData, setUserData] = useState<ProfessionalUser | null>(null);
+  const [loadingUserData, setLoadingUserData] = useState(true);
 
   useEffect(() => {
     let unsubscribe: () => void;
 
     const initAuth = async () => {
       const auth = await getAuthInstance();
-      unsubscribe = auth.onAuthStateChanged((user) => {
-        setCurrentUser(user);
+      unsubscribe = auth.onAuthStateChanged(async (user) => {
+
+        if (user) {
+          try {
+            const data = await getUserByUID(user.uid);
+            if (data) {
+              console.log("Usuario encontrado en Firestore:", data);
+              setUserData(data);
+            } else {
+              console.warn("No se encontró el usuario en Firestore para el UID:", user.uid);
+            }
+          } catch (error) {
+            console.error("Error al obtener el usuario de Firestore:", error);
+          } finally {
+            setLoadingUserData(false);
+          }
+        } else {
+          setLoadingUserData(false);
+        }
       });
     };
 
@@ -71,7 +90,7 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
   );
 
   return (
-    <aside className="w-full h-full bg-surface flex flex-col justify-between  shadow-sm">
+    <aside className="w-full h-full bg-surface flex flex-col justify-between shadow-sm">
       <div className="p-5">
         {!hideHeader && (
           <div className="mb-6">
@@ -80,16 +99,14 @@ export default function SideNavBar({ hideHeader = false }: SideNavBarProps) {
           </div>
         )}
 
-        {currentUser && (
+        {!loadingUserData && userData && (
           <div className="flex items-center gap-3 mb-6 px-1">
-            <UserCircle size={28} className="text-primary" />
+            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-white font-semibold text-sm">
+              {userData.name?.charAt(0).toUpperCase() || "U"}
+            </div>
             <div className="leading-tight">
-              <p className="text-sm font-medium text-text">
-                {currentUser.displayName || "Usuario"}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {currentUser.email}
-              </p>
+              <p className="text-sm font-medium text-text">{userData.name}</p>
+              <p className="text-xs text-muted-foreground">{userData.email}</p>
             </div>
           </div>
         )}
