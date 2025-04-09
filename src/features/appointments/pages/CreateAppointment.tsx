@@ -36,6 +36,22 @@ export default function CreateAppointment() {
     phone: "",
   });
 
+  // 👉 NUEVO estado para mostrar el formulario con delay
+  const [showNewPatientForm, setShowNewPatientForm] = useState(false);
+
+  // 🎯 Delay de 1s para mostrar NewPatientForm cuando se cumplan condiciones
+  useEffect(() => {
+    if (!loading && patients.length === 0 && currentName && !selectedPatient) {
+      const timeout = setTimeout(() => {
+        setShowNewPatientForm(true);
+      }, 1000);
+
+      return () => clearTimeout(timeout); // limpiamos el timeout si cambia algo
+    } else {
+      setShowNewPatientForm(false); // ocultamos si cambia la condición
+    }
+  }, [loading, patients.length, currentName, selectedPatient]);
+
   // 🔄 Búsqueda automática con debounce
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
@@ -156,7 +172,6 @@ export default function CreateAppointment() {
           setCurrentName(e.target.value);
           setSelectedPatient(null);
         }}
-
       />
 
       {loading && <p>Buscando paciente...</p>}
@@ -182,8 +197,8 @@ export default function CreateAppointment() {
       {/* 👤 Info paciente seleccionado */}
       {selectedPatient && <PatientInfo patient={selectedPatient} />}
 
-      {/* ➕ Registrar nuevo paciente */}
-      {!loading && patients.length === 0 && currentName && !selectedPatient && (
+      {/* ➕ Registrar nuevo paciente con delay */}
+      {showNewPatientForm && (
         <NewPatientForm
           newPatient={newPatient}
           onChange={handleNewPatientChange}

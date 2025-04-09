@@ -93,7 +93,7 @@ export default function AppRouter() {
             }
           />
           <Route
-            path="pacientes/:id"
+            path="pacientes/:id/editar"
             element={
               <Suspense fallback={SpinnerFallback}>
                 <PatientEditPage />
