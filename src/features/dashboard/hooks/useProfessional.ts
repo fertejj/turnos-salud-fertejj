@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { User } from 'firebase/auth'
+// import type { User } from 'firebase/auth'
 import { doc, getDoc } from 'firebase/firestore'
 import { ProfessionalUser } from '../types/user'
 import { getAuthInstance } from '../../../services/firebase/auth'
@@ -7,7 +7,7 @@ import { getFirestoreInstance } from '../../../services/firebase/firestore'
 
 
 export default function useProfessional() {
-  const [user, setUser] = useState<User | null>(null)
+  // const [user, setUser] = useState<User | null>(null)
   const [professional, setProfessional] = useState<ProfessionalUser | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -20,7 +20,7 @@ export default function useProfessional() {
       const db = await getFirestoreInstance()
 
       unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-        setUser(firebaseUser)
+        // setUser(firebaseUser)
 
         if (firebaseUser) {
           const docRef = doc(db, 'users', firebaseUser.uid)
