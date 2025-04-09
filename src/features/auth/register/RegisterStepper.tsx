@@ -10,7 +10,7 @@ import ProgressBar from "../../../shared/components/ui/ProgressBar";
 type FormData = {
   email?: string;
   password?: string;
-  name?: string;
+  fullName?: string;
   dni?: string;
   birthdate?: string;
   gender?: string;

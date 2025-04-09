@@ -36,12 +36,12 @@ const SettingsPage = () => {
 
           <PersonalInfoForm
             values={{
-              name: formValues.name,
+              fullName: formValues.fullName,
               dni: formValues.dni,
               birthdate: formValues.birthdate,
             }}
             onChange={(field, value) =>
-              handleChange(field as "name" | "dni" | "birthdate", value)
+              handleChange(field as "fullName" | "dni" | "birthdate", value)
             }
           />
         </CardContent>

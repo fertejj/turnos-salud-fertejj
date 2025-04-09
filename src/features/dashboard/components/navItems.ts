@@ -5,6 +5,7 @@ import {
     CalendarPlus,
     Users,
     UserPlus,
+    ChevronsLeftRightIcon,
 
   } from "lucide-react";
 
@@ -60,6 +61,17 @@ import {
               exact: true,
             },
           ],
+        },
+      ],
+    },
+    {
+      label: "Opciones",
+      items: [
+        {
+          label: "Configuración",
+          icon: ChevronsLeftRightIcon,
+          path: "/dashboard/configuracion",
+          exact: true,
         },
       ],
     },

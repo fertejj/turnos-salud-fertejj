@@ -1,7 +1,7 @@
 // src/features/dashboard/types/user.ts
 export interface ProfessionalUser {
     id: string;
-    name: string;
+    fullName: string;
     email: string;
     phone: string;
     address: string;

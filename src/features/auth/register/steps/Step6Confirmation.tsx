@@ -38,7 +38,7 @@ export default function Step6Confirmation({ formData }: Props) {
       await setDoc(doc(db, "users", user.uid), {
         email,
         role: "profesional",
-        name: formData.name,
+        fullName: formData.fullName,
         dni: formData.dni,
         birthdate: formData.birthdate,
         gender: formData.gender,
@@ -80,7 +80,7 @@ export default function Step6Confirmation({ formData }: Props) {
       <h2 className="text-lg font-semibold">Resumen</h2>
       <ul className="text-sm list-disc pl-5 space-y-1 text-text-soft">
         <li><strong>Email:</strong> {formData.email}</li>
-        <li><strong>Nombre:</strong> {formData.name}</li>
+        <li><strong>Nombre:</strong> {formData.fullName}</li>
         <li><strong>DNI:</strong> {formData.dni}</li>
         <li><strong>Especialidad:</strong> {formData.specialty}</li>
         <li><strong>Matrícula:</strong> {formData.license}</li>

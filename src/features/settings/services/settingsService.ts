@@ -8,7 +8,7 @@ export async function updateProfessionalData(professional: ProfessionalUser) {
   const docRef = doc(db, 'users', professional.id)
 
   const dataToUpdate = {
-    fullName: professional.name,
+    fullName: professional.fullName,
     dni: professional.dni,
     birthDate: professional.birthdate,
     phone: professional.phone,

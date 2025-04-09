@@ -30,7 +30,7 @@ export default function useProfessional() {
             const data = docSnap.data()
             setProfessional({
               id: firebaseUser.uid,
-              name: data.fullName || '',
+              fullName: data.fullName || '',
               email: firebaseUser.email || '',
               phone: data.phone || '',
               address: data.address || '',

@@ -80,7 +80,7 @@ export default function SideNavBar({
             />
             <div className="leading-tight">
               <p className="text-sm font-medium text-text">
-                {userData.name}
+                {userData.fullName}
               </p>
               <p className="text-xs text-muted-foreground">{userData.email}</p>
             </div>

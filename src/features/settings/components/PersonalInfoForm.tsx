@@ -1,7 +1,7 @@
 import Input from "../../../shared/components/ui/Input"
 import { ProfessionalUser } from "../../dashboard/types/user"
 
-type PersonalField = 'name' | 'dni' | 'birthdate'
+type PersonalField = 'fullName' | 'dni' | 'birthdate'
 
 interface PersonalInfoFormProps {
     values: Pick<ProfessionalUser, PersonalField>
@@ -13,8 +13,8 @@ export const PersonalInfoForm = ({ values, onChange }: PersonalInfoFormProps) =>
     <div className="space-y-4">
       <Input
         label="Nombre completo"
-        value={values.name}
-        onChange={(e) => onChange('name', e.target.value)}
+        value={values.fullName}
+        onChange={(e) => onChange('fullName', e.target.value)}
         placeholder="Ej: Dr. Juan Pérez"
       />
 

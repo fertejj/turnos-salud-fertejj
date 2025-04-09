@@ -38,9 +38,9 @@ export default function Header({ onToggleMenu }: Props) {
         ))}
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-primary-light text-primary-dark flex items-center justify-center font-semibold text-sm">
-            {profile?.name?.charAt(0).toUpperCase() || "U"}
+            {profile?.fullName?.charAt(0).toUpperCase() || "U"}
           </div>
-          <span className="text-sm text-text-soft">{profile?.name || profile?.email}</span>
+          <span className="text-sm text-text-soft">{profile?.fullName || profile?.email}</span>
           <LogoutButton />
         </div>
       </nav>
