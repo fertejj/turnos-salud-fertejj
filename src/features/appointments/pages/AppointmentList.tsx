@@ -97,7 +97,7 @@ export default function AppointmentsList() {
   });
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto">
       <h1 className="text-2xl font-semibold text-primary mb-4">Mis turnos</h1>
 
       <AppointmentsFilters

@@ -47,7 +47,7 @@ export default function ProfesionalDashboard() {
   }, [userData]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-10">
+    <div className="max-w-6xl mx-auto  space-y-10">
       <WelcomeSection user={userData} />
       <NextAppointmentCard appointment={proxTurno} />
       <hr className="border-border-base" />
