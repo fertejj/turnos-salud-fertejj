@@ -4,6 +4,7 @@ import Spinner from "../shared/components/ui/Spinner";
 import { ROUTES } from "./routes";
 import PatientList from "../features/patients/pages/PatientList";
 import PatientEditPage from "../features/patients/pages/PatientEditPage";
+import PatientDetail from "../features/patients/pages/PatientDetail";
 
 // Spinner global
 const SpinnerFallback = (
@@ -18,12 +19,22 @@ const Register = lazy(() => import("../features/auth/pages/Register"));
 const Home = lazy(() => import("../app/Home"));
 const NotFound = lazy(() => import("../shared/pages/NotFound"));
 const Unauthorized = lazy(() => import("../shared/pages/Unauthorized"));
-const ProfessionalLayout = lazy(() => import("../features/dashboard/layout/ProfessionalLayout"));
-const ProfesionalDashboard = lazy(() => import("../features/dashboard/pages/ProfesionalDashboard"));
+const ProfessionalLayout = lazy(
+  () => import("../features/dashboard/layout/ProfessionalLayout")
+);
+const ProfesionalDashboard = lazy(
+  () => import("../features/dashboard/pages/ProfesionalDashboard")
+);
 const AddPatient = lazy(() => import("../features/patients/pages/AddPatient"));
-const CreateAppointment = lazy(() => import("../features/appointments/pages/CreateAppointment"));
-const AppointmentsList = lazy(() => import("../features/appointments/pages/AppointmentList"));
-const SettingsPage = lazy(() => import("../features/settings/pages/SettingsPage"));
+const CreateAppointment = lazy(
+  () => import("../features/appointments/pages/CreateAppointment")
+);
+const AppointmentsList = lazy(
+  () => import("../features/appointments/pages/AppointmentList")
+);
+const SettingsPage = lazy(
+  () => import("../features/settings/pages/SettingsPage")
+);
 const PrivateRoute = lazy(() => import("./PrivateRoute"));
 const PublicRoute = lazy(() => import("./PublicRoute"));
 
@@ -89,6 +100,14 @@ export default function AppRouter() {
             element={
               <Suspense fallback={SpinnerFallback}>
                 <PatientList />
+              </Suspense>
+            }
+          />
+          <Route
+            path="pacientes/:id"
+            element={
+              <Suspense fallback={SpinnerFallback}>
+                <PatientDetail />
               </Suspense>
             }
           />
