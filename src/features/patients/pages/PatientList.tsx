@@ -35,7 +35,7 @@ export default function PatientList() {
   });
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className=" max-w-4xl mx-auto">
       <h1 className="text-2xl font-semibold text-primary mb-4">Mis pacientes</h1>
 
       <PatientFilters
@@ -95,7 +95,7 @@ export default function PatientList() {
               )}
               <p className="text-sm text-muted-foreground">
                 <span className="font-medium text-text">Fecha de nacimiento:</span>{" "}
-                {patient.dateOfBirth}
+                {patient.birthDate}
               </p>
               {patient.createdAt && (
                 <p className="text-xs text-muted-foreground mt-1">

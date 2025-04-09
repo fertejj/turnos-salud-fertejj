@@ -51,7 +51,7 @@ export default function PatientForm({
       onSubmit={handleSubmit(onSubmit)}
       className="bg-[var(--color-surface)] border border-[var(--color-border-base)] rounded-xl shadow-md p-6 space-y-6 max-w-3xl mx-auto"
     >
-      <h2 className="text-xl font-semibold text-[var(--color-text)]">
+      <h2 className="text-xl font-semibold text-primary">
         Información del paciente
       </h2>
 

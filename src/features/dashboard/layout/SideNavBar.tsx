@@ -8,15 +8,12 @@ import { NavLinkItem, NavSectionItem } from "../types/nav";
 import type { ProfessionalUser } from "../types/user";
 
 interface SideNavBarProps {
-  hideHeader?: boolean;
   userData: ProfessionalUser | null;
 }
 
 export default function SideNavBar({
-  hideHeader = false,
   userData,
 }: SideNavBarProps) {
-
   const location = useLocation();
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -56,23 +53,12 @@ export default function SideNavBar({
       <ChevronRight size={16} />
     </motion.div>
   );
-  console.log("Imagen de perfil:", userData)
   return (
-    <aside className="w-full h-full bg-surface flex flex-col justify-between shadow-sm">
-      <div className="p-5">
-        {!hideHeader && (
-          <div className="mb-6">
-            <h1 className="text-xl font-bold text-primary tracking-tight">
-              MiConsulta
-            </h1>
-            <p className="text-xs text-muted-foreground mt-1">
-              Panel profesional
-            </p>
-          </div>
-        )}
-
+    <aside className="w-full h-full bg-background flex flex-col justify-between shadow-sm">
+      <div className="pt-5">
+       
         {userData && (
-          <div className="flex items-center gap-3 mb-6 px-1">
+          <div className="flex items-center gap-3 mb-6 ml-3 px-1">
             <img
               src={userData.photoURL || "/default-profile.png"}
               alt="Foto de perfil"
@@ -90,7 +76,7 @@ export default function SideNavBar({
         <nav className="flex flex-col gap-6 text-sm">
           {navItems.map((section) => (
             <div key={section.label} className="flex flex-col gap-2">
-              <span className="text-[11px] font-semibold text-muted-foreground px-4 tracking-wider uppercase">
+              <span className="text-[12px] font-semibold text-muted-foreground px-4 tracking-wider uppercase">
                 {section.label}
               </span>
 
@@ -200,7 +186,7 @@ export default function SideNavBar({
         </nav>
       </div>
 
-      <div className="p-4 border-t border-border">
+      <div className="p-4 border-t border-border-base">
         <button
           onClick={handleLogout}
           className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition p-2 rounded-md w-full"

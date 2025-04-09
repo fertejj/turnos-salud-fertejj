@@ -15,7 +15,7 @@ export default function AuthLayout({ children }: Props) {
       <nav className="w-full px-6 py-4 border-b border-border-base flex justify-between items-center bg-surface shadow-sm">
         <div className="flex items-center gap-2">
           <FaHeartbeat className="text-xl text-primary" />
-          <span className="text-primary-dark font-semibold">Turnos Médicos</span>
+          <span className="text-primary-dark font-semibold">MiConsulta App</span>
         </div>
         <div className="flex items-center gap-4 text-sm font-medium">
           {pathname !== "/login" && (
@@ -37,14 +37,14 @@ export default function AuthLayout({ children }: Props) {
           <div className="flex flex-col items-center mb-6 animate-fade-in">
             <FaHeartbeat className="text-4xl text-primary mb-2" />
             <h1 className="text-xl font-semibold text-primary-dark">
-              Sistema de Turnos Médicos
+              MiConsulta App
             </h1>
           </div>
 
           <section aria-label="Formulario de autenticación">{children}</section>
 
           <footer className="mt-6 text-center text-sm text-text-soft">
-            © {new Date().getFullYear()} Turnos salud. Todos los derechos reservados.
+            © {new Date().getFullYear()} MiConsulta App. Todos los derechos reservados.
           </footer>
         </div>
       </div>

@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #2b7a78;         /* Verde azulado (confianza, estabilidad) */
-  --color-primary-dark: #205e5c;    /* Más oscuro para hover o elementos fuertes */
-  --color-primary-light: #def2f1;   /* Fondo suave, headers claros */
+  --color-primary: #2563eb;         /* Azul profesional (confianza, estabilidad) */
+  --color-primary-dark: #1e40af;    /* Hover / botones oscuros */
+  --color-primary-light: #dbeafe;   /* Fondo claro para secciones */
 
-  --color-success: #3cb371;         /* Éxito - verde salud */
-  --color-warning: #f4a261;         /* Advertencias suaves */
-  --color-error: #e76f51;           /* Errores visibles pero no agresivos */
+  --color-success: #10b981;         /* Verde esmeralda (éxito, positivo) */
+  --color-warning: #f59e0b;         /* Amarillo dorado (advertencia amigable) */
+  --color-error: #ef4444;           /* Rojo moderno (errores claros) */
 
-  --color-text: #1f2937;            /* Texto principal */
-  --color-text-soft: #6b7280;       /* Texto secundario */
-  
-  --color-background: #f0fdf4;      /* Fondo general claro y tranquilo */
-  --color-surface: #ffffff;         /* Fondo de tarjetas / componentes */
+  --color-text: #111827;            /* Gris muy oscuro (texto principal) */
+  --color-text-soft: #6b7280;       /* Gris medio (texto secundario) */
+
+  --color-background: #f9fafb;      /* Fondo general claro y limpio */
+  --color-surface: #ffffff;         /* Tarjetas, formularios, componentes */
   --colorcard-bg: #ffffff;
 
-  --color-border-base: #e5e7eb;     /* Bordes neutros */
-  --color-hover-surface: #f1f5f9;   /* Hover cards / botones suaves */
+  --color-border-base: #e5e7eb;     /* Bordes sutiles */
+  --color-hover-surface: #f3f4f6;   /* Hover suave para tarjetas/botones */
 }

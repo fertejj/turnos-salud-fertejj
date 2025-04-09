@@ -71,7 +71,7 @@ export default function RegisterStepper() {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-surface rounded shadow-md">
+    <div className="max-w-xl mx-auto p-2 bg-surface rounded">
       <h1 className="text-2xl font-bold mb-4 text-primary-dark">Registro Profesional</h1>
 
       <ProgressBar currentStep={step} totalSteps={steps.length} />

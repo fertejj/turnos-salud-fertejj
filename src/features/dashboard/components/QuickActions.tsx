@@ -47,7 +47,7 @@ const QuickActions = () => {
             title={action.title}
             subtitle={action.description}
             onClick={() => navigate(action.path)}
-            className="cursor-pointer hover:shadow-lg hover:scale-[1.02] transition"
+            className="cursor-pointer hover:shadow-lg  hover:scale-[1.02] transition"
             headerRight={
               <div className="p-2 rounded-full bg-primary/10 text-primary">
                 <Icon size={24} />

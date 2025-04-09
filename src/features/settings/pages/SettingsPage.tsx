@@ -22,7 +22,7 @@ const SettingsPage = () => {
   if (loading || !formValues) return <Spinner />;
 
   return (
-    <section className="max-w-4xl mx-auto p-4 space-y-6">
+    <section className="max-w-4xl mx-auto space-y-6">
       <h2 className="text-2xl font-semibold text-center">
         Configuración de perfil
       </h2>

@@ -25,7 +25,7 @@ export default function PatientSearch({
           type="text"
           value={name}
           onChange={onChange}
-          placeholder="Buscar paciente por DNI"
+          placeholder="Buscar paciente por Nombre"
           className="pl-10"
         />
         {isLoading ? (

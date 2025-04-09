@@ -10,7 +10,6 @@ import {
 import { useOutletContext } from "react-router-dom";
 import WelcomeSection from "../components/WelcomeSection";
 import NextAppointmentCard from "../components/NextAppointmentCard";
-import PatientManagement from "../components/PatientManagement";
 import QuickActions from "../components/QuickActions";
 import { getFirestoreInstance } from "../../../services/firebase/firestore";
 import type { ProfessionalUser } from "../types/user";
@@ -53,7 +52,6 @@ export default function ProfesionalDashboard() {
       <hr className="border-border-base" />
       <QuickActions />
       <hr className="border-border-base" />
-      {userData?.id && <PatientManagement professionalId={userData.id} />}
     </div>
   );
 }

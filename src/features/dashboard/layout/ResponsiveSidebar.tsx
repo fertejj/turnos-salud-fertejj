@@ -35,11 +35,11 @@ export default function ResponsiveSidebar({
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "tween", duration: 0.25 }}
-            className="fixed top-0 left-0 w-64 h-full bg-surface z-50 shadow-lg flex flex-col"
+            className="fixed top-0 left-0 w-64 h-full bg-background z-50 shadow-lg flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header + botón cerrar */}
-            <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="flex items-center justify-between p-4 border-b border-border-base">
               <h2 className="text-lg font-semibold text-primary">MiConsulta</h2>
               <button
                 onClick={() => setIsOpen(false)}
@@ -51,8 +51,8 @@ export default function ResponsiveSidebar({
             </div>
 
             {/* Contenido del menú */}
-            <div className="flex-1 overflow-y-auto">
-              <SideNavBar hideHeader userData={userData} />{" "}
+            <div className="flex-1 overflow-y-auto mr-2">
+              <SideNavBar  userData={userData} />{" "}
             </div>
           </motion.aside>
         </motion.div>

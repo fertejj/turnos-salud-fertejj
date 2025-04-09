@@ -8,7 +8,7 @@ export default function WelcomeSection({ user }: Props) {
   const displayName = user?.fullName || "Profesional";
 
   return (
-    <section className="bg-primary-light border border-primary/20 rounded-xl p-6 flex items-center gap-4 shadow-sm">
+    <section className="bg-surface border border-primary/20 rounded-xl p-6 flex items-center gap-4 shadow-sm">
       {/* Avatar o inicial */}
       {user?.photoURL ? (
         <img
