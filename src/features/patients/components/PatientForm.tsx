@@ -10,7 +10,7 @@ const schema = z.object({
   dni: z.string().min(7, "El DNI debe tener al menos 7 dígitos").max(10),
   phone: z.string().optional(),
   email: z.string().email("Email inválido").optional(),
-  dateOfBirth: z.string().min(1, "La fecha de nacimiento es requerida"),
+  birthDate: z.string().min(1, "La fecha de nacimiento es requerida"),
   gender: z.enum(["Masculino", "Femenino", "Otro"]),
   insurance: z.string().optional(),
 });
@@ -40,7 +40,7 @@ export default function PatientForm({
       dni: initialData?.dni || "",
       phone: initialData?.phone || "",
       email: initialData?.email || "",
-      dateOfBirth: initialData?.dateOfBirth || "",
+      birthDate: initialData?.birthDate || "",
       gender: initialData?.gender || "Otro",
       insurance: initialData?.insurance || "",
     },
@@ -99,9 +99,9 @@ export default function PatientForm({
           </label>
           <Input
             type="date"
-            {...register("dateOfBirth")}
-            hasError={!!errors.dateOfBirth}
-            errorMessage={errors.dateOfBirth?.message}
+            {...register("birthDate")}
+            hasError={!!errors.birthDate}
+            errorMessage={errors.birthDate?.message}
           />
         </div>
 

@@ -5,7 +5,7 @@ export type Patient = {
   dni: string
   phone?: string
   email?: string
-  dateOfBirth: string
+  birthDate: string
   gender: "Masculino" | "Femenino" | "Otro"
   insurance?: string
   createdAt?: string
