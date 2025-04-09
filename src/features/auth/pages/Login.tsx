@@ -7,8 +7,8 @@ import {
 import { useNavigate } from "react-router-dom";
 // import { FaGoogle } from "react-icons/fa";
 import AuthLayout from "../../../shared/layout/AuthLayout";
-import Input from "../../../shared/components/Input";
-import PrimaryButton from "../../../shared/components/PrimaryButton";
+import Input from "../../../shared/components/ui/Input";
+import PrimaryButton from "../../../shared/components/ui/PrimaryButton";
 import { getAuthInstance } from "../../../services/firebase/auth";
 // import SecondaryButton from "../../../shared/components/SecondaryButton";
 

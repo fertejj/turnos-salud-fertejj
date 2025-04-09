@@ -12,7 +12,11 @@ interface SideNavBarProps {
   userData: ProfessionalUser | null;
 }
 
-export default function SideNavBar({ hideHeader = false, userData }: SideNavBarProps) {
+export default function SideNavBar({
+  hideHeader = false,
+  userData,
+}: SideNavBarProps) {
+
   const location = useLocation();
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -52,24 +56,32 @@ export default function SideNavBar({ hideHeader = false, userData }: SideNavBarP
       <ChevronRight size={16} />
     </motion.div>
   );
-
+  console.log("Imagen de perfil:", userData)
   return (
     <aside className="w-full h-full bg-surface flex flex-col justify-between shadow-sm">
       <div className="p-5">
         {!hideHeader && (
           <div className="mb-6">
-            <h1 className="text-xl font-bold text-primary tracking-tight">MiConsulta</h1>
-            <p className="text-xs text-muted-foreground mt-1">Panel profesional</p>
+            <h1 className="text-xl font-bold text-primary tracking-tight">
+              MiConsulta
+            </h1>
+            <p className="text-xs text-muted-foreground mt-1">
+              Panel profesional
+            </p>
           </div>
         )}
 
         {userData && (
           <div className="flex items-center gap-3 mb-6 px-1">
-            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-white font-semibold text-sm">
-              {userData.name?.charAt(0).toUpperCase() || "U"}
-            </div>
+            <img
+              src={userData.photoURL || "/default-profile.png"}
+              alt="Foto de perfil"
+              className="w-10 h-10 rounded-full object-cover border"
+            />
             <div className="leading-tight">
-              <p className="text-sm font-medium text-text">{userData.name}</p>
+              <p className="text-sm font-medium text-text">
+                {userData.name}
+              </p>
               <p className="text-xs text-muted-foreground">{userData.email}</p>
             </div>
           </div>

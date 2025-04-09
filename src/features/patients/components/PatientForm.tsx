@@ -2,7 +2,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Patient } from "../types";
-import Input from "../../../shared/components/Input";
+import Input from "../../../shared/components/ui/Input";
 
 const schema = z.object({
   name: z.string().min(2, "El nombre es requerido"),

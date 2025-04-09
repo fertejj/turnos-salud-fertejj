@@ -1,4 +1,4 @@
-import Input from "../../../shared/components/Input";
+import Input from "../../../shared/components/ui/Input";
 
 type Props = {
   newPatient: { name: string; email: string; phone: string };

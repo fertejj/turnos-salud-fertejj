@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle } from "react";
-import Input from "../../../../shared/components/Input";
+import Input from "../../../../shared/components/ui/Input";
 
 type Props = {
   formData: {

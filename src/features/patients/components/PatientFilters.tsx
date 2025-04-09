@@ -1,4 +1,4 @@
-import Input from "../../../shared/components/Input";
+import Input from "../../../shared/components/ui/Input";
 
 // src/features/patients/components/PatientFilters.tsx
 interface PatientFiltersProps {

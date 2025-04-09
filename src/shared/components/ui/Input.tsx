@@ -4,6 +4,7 @@ import { MdErrorOutline } from "react-icons/md";
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
   hasError?: boolean;
+  label?: string;
   errorMessage?: string;
 };
 

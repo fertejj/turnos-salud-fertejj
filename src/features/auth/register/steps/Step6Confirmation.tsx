@@ -2,7 +2,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PrimaryButton from "../../../../shared/components/PrimaryButton";
+import PrimaryButton from "../../../../shared/components/ui/PrimaryButton";
 import { getAuthInstance } from "../../../../services/firebase/auth";
 import { getFirestoreInstance } from "../../../../services/firebase/firestore";
 

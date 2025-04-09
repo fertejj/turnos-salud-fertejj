@@ -5,7 +5,7 @@ import Step3ProfessionalInfo, { Step3ProfessionalInfoRef } from "./steps/Step3Pr
 import Step4ContactInfo, { Step4ContactInfoRef } from "./steps/Step4ContactInfo";
 import Step5TurnPreferences, { Step5TurnPreferencesRef } from "./steps/Step5TurnPreferences";
 import Step6Confirmation from "./steps/Step6Confirmation";
-import ProgressBar from "../../../shared/components/ProgressBar";
+import ProgressBar from "../../../shared/components/ui/ProgressBar";
 
 type FormData = {
   email?: string;

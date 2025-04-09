@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../features/auth/context/AuthContext";
-import Spinner from "../shared/components/Spinner";
+import Spinner from "../shared/components/ui/Spinner";
 
 type Role = "admin" | "profesional" ;
 

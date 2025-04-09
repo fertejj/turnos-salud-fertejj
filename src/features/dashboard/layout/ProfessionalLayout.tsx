@@ -5,7 +5,7 @@ import ResponsiveSidebar from "./ResponsiveSidebar";
 import { getAuthInstance } from "../../../services/firebase/auth";
 import { getUserByUID } from "../services/userService";
 import type { ProfessionalUser } from "../types/user";
-import FullPageSpinner from "../../../shared/components/FullPageSpinner";
+import FullPageSpinner from "../../../shared/components/ui/FullPageSpinner";
 
 export default function ProfessionalLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

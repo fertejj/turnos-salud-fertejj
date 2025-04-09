@@ -5,7 +5,7 @@ import {
   FiDollarSign,
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import ProCard from "../../../shared/components/ui/card/ProCard";
+import ProCard from "../../../components/ui/ProCard";
 
 const QuickActions = () => {
   const navigate = useNavigate();

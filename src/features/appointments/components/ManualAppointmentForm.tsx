@@ -5,7 +5,7 @@ import { Timestamp, collection, addDoc, query, where, getDocs, doc, setDoc } fro
 import { useState } from "react";
 
 import { useAuth } from "../../auth/context/AuthContext";
-import PrimaryButton from "../../../shared/components/PrimaryButton";
+import PrimaryButton from "../../../shared/components/ui/PrimaryButton";
 import { appointmentSchema, AppointmentData } from "../schemas/appointmentSchema";
 import { getFirestoreInstance } from "../../../services/firebase/firestore";
 

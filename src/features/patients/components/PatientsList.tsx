@@ -1,6 +1,6 @@
 import { usePatients } from "../hooks/usePatients";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
-import Card from "../../../shared/components/ui/card/Card";
+import Card from "../../../components/ui/Card";
 import { useNavigate } from "react-router-dom";
 
 interface PatientsListProps {

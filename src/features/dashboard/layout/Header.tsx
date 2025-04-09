@@ -1,6 +1,6 @@
 // dashboard/layout/Header.tsx
 import { FiMenu } from "react-icons/fi";
-import LogoutButton from "../../../shared/components/LogoutButton";
+import LogoutButton from "../../../shared/components/ui/LogoutButton";
 import { NavLink } from "react-router-dom";
 import useProfessional from "../hooks/useProfessional";
 
