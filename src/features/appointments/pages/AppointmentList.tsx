@@ -9,7 +9,7 @@ import {
 import { useAuth } from "../../auth/context/AuthContext";
 import AppointmentsFilters from "../components/AppointmentFilters";
 import { getFirestoreInstance } from "../../../services/firebase/firestore";
-import ProCard from "../../../components/ui/ProCard";
+import ProCard from "../../../shared/ui/card/ProCard";
 
 type Appointment = {
   id: string;

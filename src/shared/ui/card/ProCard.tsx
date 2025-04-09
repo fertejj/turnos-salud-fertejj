@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { cn } from "../../shared/utils/cn";
+import { cn } from "../../utils/cn";
 
 interface ProCardProps {
   title?: string;

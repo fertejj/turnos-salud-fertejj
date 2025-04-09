@@ -1,5 +1,5 @@
 import { HTMLAttributes, ReactNode } from "react"
-import { cn } from "../../shared/utils/cn"
+import { cn } from "../../utils/cn"
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode

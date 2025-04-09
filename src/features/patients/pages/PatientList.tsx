@@ -1,5 +1,5 @@
 import { useAuth } from "../../../features/auth/context/AuthContext";
-import ProCard from "../../../components/ui/ProCard";
+import ProCard from "../../../shared/ui/card/ProCard";
 import PatientFilters from "../components/PatientFilters";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";

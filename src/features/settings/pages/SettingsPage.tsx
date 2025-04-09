@@ -4,8 +4,8 @@ import { ContactInfoForm } from "../components/ContactInfoForm";
 import { useSettingsForm } from "../hooks/useSettingsForm";
 import useProfessional from "../../dashboard/hooks/useProfessional";
 import Spinner from "../../../shared/components/ui/Spinner";
-import Card from "../../../components/ui/Card";
-import CardContent from "../../../components/ui/CardContent";
+import Card from "../../../shared/ui/card/Card";
+import CardContent from "../../../shared/ui/card/CardContent";
 import PrimaryButton from "../../../shared/components/ui/PrimaryButton";
 
 const SettingsPage = () => {
