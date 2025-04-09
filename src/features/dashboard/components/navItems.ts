@@ -70,7 +70,7 @@ import {
         {
           label: "Configuración",
           icon: ChevronsLeftRightIcon,
-          path: "/dashboard/configuracion",
+          path: "/dashboard/profesional/configuracion",
           exact: true,
         },
       ],

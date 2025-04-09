@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   collection,
   query,
@@ -18,8 +18,9 @@ import { getFirestoreInstance } from "../../../services/firebase/firestore";
 export default function CreateAppointment() {
   const { user } = useAuth();
 
-  const [dni, setDni] = useState("");
-  const [patient, setPatient] = useState<any>(null);
+  const [currentName, setCurrentName] = useState("");
+  const [patients, setPatients] = useState<any[]>([]);
+  const [selectedPatient, setSelectedPatient] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -35,34 +36,47 @@ export default function CreateAppointment() {
     phone: "",
   });
 
-  const handleSearch = async () => {
-    if (!dni || !user) return;
+  // 🔄 Búsqueda automática con debounce
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      const fetchPatients = async () => {
+        if (!currentName.trim() || !user) {
+          setPatients([]);
+          return;
+        }
 
-    setLoading(true);
-    setPatient(null);
+        setLoading(true);
+        try {
+          const db = await getFirestoreInstance();
+          const q = query(
+            collection(db, "patients"),
+            where("professionalId", "==", user.uid)
+          );
+          const snapshot = await getDocs(q);
 
-    try {
-      const db = await getFirestoreInstance();
-      const q = query(
-        collection(db, "patients"),
-        where("dni", "==", dni.trim()),
-        where("professionalId", "==", user.uid)
-      );
-      const snapshot = await getDocs(q);
+          const filtered = snapshot.docs
+            .map((doc) => ({ id: doc.id, ...doc.data() }))
+            .filter((p: any) =>
+              p.name.toLowerCase().includes(currentName.toLowerCase().trim())
+            );
 
-      if (!snapshot.empty) {
-        const doc = snapshot.docs[0];
-        setPatient({ id: doc.id, ...doc.data() });
-      }
-    } catch (error) {
-      console.error("Error buscando paciente:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+          setPatients(filtered);
+        } catch (err) {
+          console.error("Error buscando pacientes:", err);
+        } finally {
+          setLoading(false);
+        }
+      };
 
+      fetchPatients();
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [currentName, user]);
+
+  // 👤 Registrar nuevo paciente
   const handleRegisterPatient = async () => {
-    if (!newPatient.name || !newPatient.email || !newPatient.phone || !dni || !user) {
+    if (!newPatient.name || !newPatient.email || !newPatient.phone || !currentName || !user) {
       alert("Completá todos los datos del paciente.");
       return;
     }
@@ -71,20 +85,22 @@ export default function CreateAppointment() {
       const db = await getFirestoreInstance();
       const docRef = await addDoc(collection(db, "patients"), {
         ...newPatient,
-        dni: dni.trim(),
+        dni: currentName.trim(),
         professionalId: user.uid,
         createdAt: Timestamp.now(),
       });
 
-      setPatient({ id: docRef.id, ...newPatient, dni });
+      setSelectedPatient({ id: docRef.id, ...newPatient, dni: currentName.trim() });
       setNewPatient({ name: "", email: "", phone: "" });
+      setPatients([]);
     } catch (err) {
       console.error("Error registrando paciente:", err);
     }
   };
 
+  // 📅 Crear turno
   const handleCreateAppointment = async () => {
-    if (!form.date || !form.time || !patient) {
+    if (!form.date || !form.time || !selectedPatient) {
       alert("Completá todos los campos");
       return;
     }
@@ -98,16 +114,17 @@ export default function CreateAppointment() {
     try {
       const db = await getFirestoreInstance();
       await addDoc(collection(db, "appointments"), {
-        patientId: patient.id,
+        patientId: selectedPatient.id,
         date: Timestamp.fromDate(date),
         note: form.note,
         createdAt: Timestamp.now(),
       });
 
       alert("Turno creado correctamente");
-      setPatient(null);
-      setDni("");
+      setSelectedPatient(null);
+      setCurrentName("");
       setForm({ date: "", time: "", note: "" });
+      setPatients([]);
     } catch (err) {
       console.error("Error al crear turno:", err);
     } finally {
@@ -115,6 +132,7 @@ export default function CreateAppointment() {
     }
   };
 
+  // 🔄 Cambios en formularios
   const handleFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -131,17 +149,41 @@ export default function CreateAppointment() {
     <div className="p-6 max-w-xl mx-auto">
       <h1 className="text-2xl font-semibold text-primary mb-4">Nuevo turno</h1>
 
+      {/* 🔍 Búsqueda de paciente */}
       <PatientSearch
-        dni={dni}
-        onChange={(e) => setDni(e.target.value)}
-        onSearch={handleSearch}
+        name={currentName}
+        onChange={(e) => {
+          setCurrentName(e.target.value);
+          setSelectedPatient(null);
+        }}
+
       />
 
       {loading && <p>Buscando paciente...</p>}
 
-      {patient && <PatientInfo patient={patient} />}
+      {/* 📋 Lista de pacientes encontrados */}
+      {patients.length > 0 && !selectedPatient && (
+        <div className="bg-surface rounded-lg p-2 shadow-md mt-2">
+          <p className="text-sm mb-2 text-gray-600">Pacientes encontrados:</p>
+          <ul>
+            {patients.map((p) => (
+              <li
+                key={p.id}
+                className="cursor-pointer hover:bg-gray-100 px-2 py-1 rounded"
+                onClick={() => setSelectedPatient(p)}
+              >
+                {p.name} ({p.dni})
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
-      {!loading && !patient && dni && (
+      {/* 👤 Info paciente seleccionado */}
+      {selectedPatient && <PatientInfo patient={selectedPatient} />}
+
+      {/* ➕ Registrar nuevo paciente */}
+      {!loading && patients.length === 0 && currentName && !selectedPatient && (
         <NewPatientForm
           newPatient={newPatient}
           onChange={handleNewPatientChange}
@@ -149,7 +191,8 @@ export default function CreateAppointment() {
         />
       )}
 
-      {patient && (
+      {/* 📅 Crear turno */}
+      {selectedPatient && (
         <AppointmentForm
           form={form}
           onChange={handleFormChange}

@@ -5,13 +5,20 @@ import { MdErrorOutline } from "react-icons/md";
 type Props = InputHTMLAttributes<HTMLInputElement> & {
   hasError?: boolean;
   label?: string;
+  className?: string;
   errorMessage?: string;
 };
 
 const Input = forwardRef<HTMLInputElement, Props>(
-  ({ hasError = false, errorMessage, className, ...props }, ref) => {
+  ({ hasError = false, errorMessage, className, label, ...props }, ref) => {
     return (
-      <div className="flex flex-col gap-1">
+      <div className={clsx("flex flex-col gap-1", className)}>
+        {label && (
+          <label className="text-sm font-medium text-text mb-1">
+            {label}
+          </label>
+        )}
+
         <div className="relative">
           <input
             ref={ref}
@@ -21,8 +28,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
               "transition-all duration-200 shadow-sm focus:outline-none focus:ring-2",
               hasError
                 ? "ring-2 ring-red-400 pr-10"
-                : "focus:ring-primary/40 focus:border-primary",
-              className
+                : "focus:ring-primary/40 focus:border-primary"
             )}
             {...props}
           />
@@ -38,5 +44,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
     );
   }
 );
+
+
 
 export default Input;

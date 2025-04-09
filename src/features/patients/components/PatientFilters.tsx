@@ -14,12 +14,13 @@ export default function PatientFilters({
   onDniChange,
 }: PatientFiltersProps) {
   return (
-    <div className="flex justify-center flex-col sm:flex-row gap-4 mb-6">
+    <div className="flex justify-center w-[100%] flex-col sm:flex-row gap-4 mb-6">
       <Input
         type="text"
         placeholder="Buscar por nombre o apellido"
         value={nameQuery}
         onChange={onNameChange}
+        className="flex-1"
       />
       <Input
         type="text"
