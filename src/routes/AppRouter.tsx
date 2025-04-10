@@ -2,11 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Spinner from "../shared/components/ui/Spinner";
 import { ROUTES } from "./routes";
-import PatientList from "../features/patients/pages/PatientList";
-import PatientEditPage from "../features/patients/pages/PatientEditPage";
-import PatientDetail from "../features/patients/pages/PatientDetail";
 
-// Spinner global
 const SpinnerFallback = (
   <div className="h-screen flex justify-center items-center">
     <Spinner />
@@ -14,6 +10,21 @@ const SpinnerFallback = (
 );
 
 // Lazy imports
+const PatientList = lazy(
+  () => import("../features/patients/pages/PatientList")
+);
+const PatientDetail = lazy(
+  () => import("../features/patients/pages/PatientDetail")
+);
+const PatientEditPage = lazy(
+  () => import("../features/patients/pages/PatientEditPage")
+);
+const MedicalHistoryFormPage = lazy(
+  () => import("../features/medical-history/pages/MedicalHistoryFormPage")
+);
+const MedicalHistoryDetailPage = lazy(
+  () => import("../features/medical-history/pages/MedicalHistoryDetailPage")
+);
 const Login = lazy(() => import("../features/auth/pages/Login"));
 const Register = lazy(() => import("../features/auth/pages/Register"));
 const Home = lazy(() => import("../app/Home"));
@@ -35,6 +46,9 @@ const AppointmentsList = lazy(
 const SettingsPage = lazy(
   () => import("../features/settings/pages/SettingsPage")
 );
+const EditMedicalHistoryPage = lazy(
+  () => import("../features/medical-history/pages/EditMedicalHistoryPage")
+);
 const PrivateRoute = lazy(() => import("./PrivateRoute"));
 const PublicRoute = lazy(() => import("./PublicRoute"));
 
@@ -42,7 +56,7 @@ export default function AppRouter() {
   return (
     <Suspense fallback={SpinnerFallback}>
       <Routes>
-        {/* Rutas públicas protegidas para usuarios logueados */}
+        {/* Rutas públicas */}
         <Route
           path={ROUTES.login}
           element={
@@ -60,7 +74,7 @@ export default function AppRouter() {
           }
         />
 
-        {/* Ruta protegida: Inicio general */}
+        {/* Ruta protegida de inicio */}
         <Route
           path={ROUTES.home}
           element={
@@ -70,7 +84,7 @@ export default function AppRouter() {
           }
         />
 
-        {/* Dashboard profesional */}
+        {/* Rutas protegidas del dashboard profesional */}
         <Route
           path={ROUTES.dashboard.profesional}
           element={
@@ -87,19 +101,20 @@ export default function AppRouter() {
               </Suspense>
             }
           />
-          <Route
-            path="pacientes/nuevo"
-            element={
-              <Suspense fallback={SpinnerFallback}>
-                <AddPatient />
-              </Suspense>
-            }
-          />
+
           <Route
             path="pacientes"
             element={
               <Suspense fallback={SpinnerFallback}>
                 <PatientList />
+              </Suspense>
+            }
+          />
+          <Route
+            path="pacientes/nuevo"
+            element={
+              <Suspense fallback={SpinnerFallback}>
+                <AddPatient />
               </Suspense>
             }
           />
@@ -120,14 +135,33 @@ export default function AppRouter() {
             }
           />
 
+          {/* Historia Clínica */}
           <Route
-            path="turnos/nuevo"
+            path="pacientes/:patientId/historia-clinica/nueva"
             element={
               <Suspense fallback={SpinnerFallback}>
-                <CreateAppointment />
+                <MedicalHistoryFormPage />
               </Suspense>
             }
           />
+          <Route
+            path="pacientes/:patientId/historia/:entryId/editar"
+            element={
+              <Suspense fallback={SpinnerFallback}>
+                <EditMedicalHistoryPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="pacientes/:patientId/historia/:entryId"
+            element={
+              <Suspense fallback={SpinnerFallback}>
+                <MedicalHistoryDetailPage />
+              </Suspense>
+            }
+          />
+
+          {/* Turnos */}
           <Route
             path="turnos"
             element={
@@ -136,6 +170,16 @@ export default function AppRouter() {
               </Suspense>
             }
           />
+          <Route
+            path="turnos/nuevo"
+            element={
+              <Suspense fallback={SpinnerFallback}>
+                <CreateAppointment />
+              </Suspense>
+            }
+          />
+
+          {/* Configuración */}
           <Route
             path="configuracion"
             element={
@@ -146,10 +190,8 @@ export default function AppRouter() {
           />
         </Route>
 
-        {/* Ruta 403 */}
+        {/* Errores */}
         <Route path="/unauthorized" element={<Unauthorized />} />
-
-        {/* Ruta 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
