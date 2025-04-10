@@ -22,7 +22,7 @@ export default function AddTimeSlot({
   validationError,
 }: Props) {
   return (
-    <div className="bg-white border border-dashed border-gray-300 rounded-xl p-4 shadow-sm hover:shadow-md transition duration-150 mt-4">
+    <div className="bg-white border border-dashed border-gray-300 rounded-xl p-4 shadow-md hover:shadow-md transition duration-150 mt-4">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         {/* Inputs */}
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full">

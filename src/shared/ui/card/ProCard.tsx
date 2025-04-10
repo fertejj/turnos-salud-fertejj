@@ -56,7 +56,7 @@ export default function ProCard({
       {children && <div className="text-sm text-text">{children}</div>}
 
       {actions && (
-        <div className="pt-3 mt-auto border-t border-border flex justify-end gap-2 text-sm text-primary">
+        <div className="pt-3 mt-auto border-t border-gray-300 flex justify-end gap-2 text-sm text-primary">
           {actions}
         </div>
       )}

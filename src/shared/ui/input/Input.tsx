@@ -18,7 +18,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
             aria-invalid={hasError}
             className={clsx(
               "w-full rounded-2xl px-4 py-2.5 bg-white text-sm text-text placeholder-text-soft",
-              "transition-all duration-200 shadow-sm focus:outline-none focus:ring-2",
+              "transition-all duration-200 shadow-md focus:outline-none focus:ring-2",
               hasError
                 ? "ring-2 ring-red-400 pr-10"
                 : "focus:ring-primary/40 focus:border-primary",

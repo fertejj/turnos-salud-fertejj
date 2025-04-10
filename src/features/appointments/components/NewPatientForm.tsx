@@ -12,8 +12,8 @@ export default function NewPatientForm({
   onSubmit,
 }: Props) {
   return (
-    <div className="bg-surface flex flex-col gap-4 rounded-2xl p-4 mb-4 text-sm shadow-md hover:shadow-lg transition-shadow">
-      <p className="text-red-500 mb-2">
+    <div className="bg-[var(--color-surface)] rounded-2xl p-6 shadow-md transition-shadow space-y-4">
+      <p className="text-sm text-[var(--color-error)] font-medium">
         Paciente no encontrado. ¿Registrar nuevo?
       </p>
 
@@ -39,12 +39,14 @@ export default function NewPatientForm({
         onChange={onChange}
       />
 
-      <button
-        onClick={onSubmit}
-        className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90"
-      >
-        Registrar paciente
-      </button>
+      <div className="pt-2">
+        <button
+          onClick={onSubmit}
+          className="w-full bg-[var(--color-primary)] text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-[var(--color-primary-dark)] transition-all"
+        >
+          Registrar paciente
+        </button>
+      </div>
     </div>
   );
 }

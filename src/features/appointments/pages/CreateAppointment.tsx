@@ -25,7 +25,7 @@ export default function CreateAppointment() {
   const [submitting, setSubmitting] = useState(false);
 
   const [form, setForm] = useState({
-    date: "",
+    date: new Date(),
     time: "",
     note: "",
   });
@@ -36,23 +36,19 @@ export default function CreateAppointment() {
     phone: "",
   });
 
-  // 👉 NUEVO estado para mostrar el formulario con delay
   const [showNewPatientForm, setShowNewPatientForm] = useState(false);
 
-  // 🎯 Delay de 1s para mostrar NewPatientForm cuando se cumplan condiciones
   useEffect(() => {
     if (!loading && patients.length === 0 && currentName && !selectedPatient) {
       const timeout = setTimeout(() => {
         setShowNewPatientForm(true);
       }, 1000);
-
-      return () => clearTimeout(timeout); // limpiamos el timeout si cambia algo
+      return () => clearTimeout(timeout);
     } else {
-      setShowNewPatientForm(false); // ocultamos si cambia la condición
+      setShowNewPatientForm(false);
     }
   }, [loading, patients.length, currentName, selectedPatient]);
 
-  // 🔄 Búsqueda automática con debounce
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       const fetchPatients = async () => {
@@ -69,7 +65,6 @@ export default function CreateAppointment() {
             where("professionalId", "==", user.uid)
           );
           const snapshot = await getDocs(q);
-
           const filtered = snapshot.docs
             .map((doc) => ({ id: doc.id, ...doc.data() }))
             .filter((p: any) =>
@@ -90,7 +85,6 @@ export default function CreateAppointment() {
     return () => clearTimeout(delayDebounce);
   }, [currentName, user]);
 
-  // 👤 Registrar nuevo paciente
   const handleRegisterPatient = async () => {
     if (!newPatient.name || !newPatient.email || !newPatient.phone || !currentName || !user) {
       alert("Completá todos los datos del paciente.");
@@ -114,16 +108,15 @@ export default function CreateAppointment() {
     }
   };
 
-  // 📅 Crear turno
   const handleCreateAppointment = async () => {
     if (!form.date || !form.time || !selectedPatient) {
       alert("Completá todos los campos");
       return;
     }
 
-    const [year, month, day] = form.date.split("-");
     const [hour, minute] = form.time.split(":");
-    const date = new Date(+year, +month - 1, +day, +hour, +minute);
+    const fullDate = new Date(form.date);
+    fullDate.setHours(+hour, +minute);
 
     setSubmitting(true);
 
@@ -131,7 +124,7 @@ export default function CreateAppointment() {
       const db = await getFirestoreInstance();
       await addDoc(collection(db, "appointments"), {
         patientId: selectedPatient.id,
-        date: Timestamp.fromDate(date),
+        date: Timestamp.fromDate(fullDate),
         note: form.note,
         createdAt: Timestamp.now(),
       });
@@ -139,7 +132,7 @@ export default function CreateAppointment() {
       alert("Turno creado correctamente");
       setSelectedPatient(null);
       setCurrentName("");
-      setForm({ date: "", time: "", note: "" });
+      setForm({ date: new Date(), time: "", note: "" });
       setPatients([]);
     } catch (err) {
       console.error("Error al crear turno:", err);
@@ -148,12 +141,15 @@ export default function CreateAppointment() {
     }
   };
 
-  // 🔄 Cambios en formularios
   const handleFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    if (name === "date") {
+      setForm({ ...form, date: new Date(value) });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   const handleNewPatientChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -162,10 +158,18 @@ export default function CreateAppointment() {
   };
 
   return (
-    <div className="max-w-xl mx-auto">
-      <h1 className="text-2xl font-semibold text-text mb-4">Nuevo turno</h1>
+    <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
+      {/* Encabezado */}
+      <div className="border-b border-[var(--color-border-base)] pb-4">
+        <h1 className="text-3xl font-bold text-[var(--color-text)] leading-tight">
+          Nuevo turno
+        </h1>
+        <p className="text-sm text-[var(--color-text-soft)] mt-1">
+          Buscá al paciente y completá los datos para registrar un nuevo turno.
+        </p>
+      </div>
 
-      {/* 🔍 Búsqueda de paciente */}
+      {/* Buscador */}
       <PatientSearch
         name={currentName}
         onChange={(e) => {
@@ -174,30 +178,44 @@ export default function CreateAppointment() {
         }}
       />
 
-      {loading && <p>Buscando paciente...</p>}
+      {/* Estado de búsqueda */}
+      {loading && (
+        <p className="text-sm text-[var(--color-text-soft)]">
+          Buscando paciente...
+        </p>
+      )}
 
-      {/* 📋 Lista de pacientes encontrados */}
+      {/* Resultados */}
       {patients.length > 0 && !selectedPatient && (
-        <div className="bg-surface rounded-lg p-2 shadow-md mt-2">
-          <p className="text-sm mb-2 text-gray-600">Pacientes encontrados:</p>
-          <ul>
+        <div className="bg-[var(--color-surface)] border border-[var(--color-border-base)] rounded-2xl p-6 shadow-md space-y-2">
+          <p className="text-sm font-medium text-[var(--color-text-soft)]">
+            Pacientes encontrados:
+          </p>
+          <ul className="space-y-1">
             {patients.map((p) => (
               <li
                 key={p.id}
-                className="cursor-pointer hover:bg-gray-100 px-2 py-1 rounded"
+                className="cursor-pointer hover:bg-[var(--color-border-base)] px-3 py-1 rounded transition"
                 onClick={() => setSelectedPatient(p)}
               >
-                {p.name} ({p.dni})
+                <span className="text-[var(--color-text)]">{p.name}</span>{" "}
+                <span className="text-sm text-[var(--color-text-soft)]">
+                  ({p.dni})
+                </span>
               </li>
             ))}
           </ul>
         </div>
       )}
 
-      {/* 👤 Info paciente seleccionado */}
-      {selectedPatient && <PatientInfo patient={selectedPatient} />}
+      {/* Info de paciente seleccionado */}
+      {selectedPatient && (
+        <div className="bg-[var(--color-surface)] border border-[var(--color-border-base)] rounded-2xl p-6 shadow-md">
+          <PatientInfo patient={selectedPatient} />
+        </div>
+      )}
 
-      {/* ➕ Registrar nuevo paciente con delay */}
+      {/* Formulario nuevo paciente */}
       {showNewPatientForm && (
         <NewPatientForm
           newPatient={newPatient}
@@ -206,14 +224,16 @@ export default function CreateAppointment() {
         />
       )}
 
-      {/* 📅 Crear turno */}
+      {/* Formulario de turno */}
       {selectedPatient && (
-        <AppointmentForm
-          form={form}
-          onChange={handleFormChange}
-          onSubmit={handleCreateAppointment}
-          submitting={submitting}
-        />
+        <div className="bg-[var(--color-surface)] border border-[var(--color-border-base)] rounded-2xl p-6 shadow-md">
+          <AppointmentForm
+            form={form}
+            onChange={handleFormChange}
+            onSubmit={handleCreateAppointment}
+            submitting={submitting}
+          />
+        </div>
       )}
     </div>
   );

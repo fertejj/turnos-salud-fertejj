@@ -41,7 +41,7 @@ export default function MedicalHistoryList({ patientId }: Props) {
               entryId={entry.id!}
               patientId={patientId}
               title={entry.reason}
-              date={new Date(entry.createdAt).toLocaleString("es-AR")}
+              date={new Date(entry.createdAt)}
               note={entry.note}
             />
           ))}

@@ -1,20 +1,22 @@
-import { useParams, useNavigate } from "react-router-dom"
-import { useMedicalHistory } from "../hooks/useMedicalHistory"
-import Spinner from "../../../shared/components/ui/Spinner"
+import { useParams, useNavigate } from "react-router-dom";
+import { useMedicalHistory } from "../hooks/useMedicalHistory";
+import Spinner from "../../../shared/components/ui/Spinner";
+import { Pencil } from "lucide-react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 export default function MedicalHistoryDetailPage() {
-  const { patientId, entryId } = useParams()
-  const navigate = useNavigate()
-  const { entries, loading, error } = useMedicalHistory(patientId)
-
-  const entry = entries.find((e) => e.id === entryId)
+  const { patientId = "", entryId = "" } = useParams();
+  const navigate = useNavigate();
+  const { entries, loading, error } = useMedicalHistory(patientId);
+  const entry = entries.find((e) => e.id === entryId);
 
   if (loading)
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <Spinner />
       </div>
-    )
+    );
 
   if (error || !entry)
     return (
@@ -23,44 +25,66 @@ export default function MedicalHistoryDetailPage() {
           {error || "Entrada no encontrada."}
         </p>
       </div>
-    )
+    );
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
-      <div className="flex justify-between items-center border-b border-[var(--color-border-base)] pb-4">
+      {/* Encabezado */}
+      <div className="flex items-center justify-between border-b border-[var(--color-border-base)] pb-4">
         <h1 className="text-2xl font-semibold text-[var(--color-text)]">
           Detalle de Historia Clínica
         </h1>
-        <button
-          onClick={() => navigate(-1)}
-          className="text-sm text-[var(--color-primary)] hover:underline"
-        >
-          Volver
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() =>
+              navigate(`/dashboard/profesional/pacientes/${patientId}/historia/${entryId}/editar`)
+            }
+            className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)] transition"
+          >
+            <Pencil size={16} />
+            Editar
+          </button>
+          <button
+            onClick={() => navigate(-1)}
+            className="px-3 py-1.5 text-sm rounded border border-[var(--color-border-base)] text-[var(--color-text)] hover:bg-[var(--color-hover-surface)] transition"
+          >
+            Volver
+          </button>
+        </div>
       </div>
 
-      <div className="space-y-4 bg-[var(--color-surface)] p-6 rounded-xl border border-[var(--color-border-base)] shadow-sm">
-        <DetailRow label="Fecha" value={entry.date} />
-        <DetailRow label="Motivo" value={entry.reason} />
-        <DetailRow label="Síntomas" value={entry.symptoms} />
-        {entry.description && <DetailRow label="Descripción" value={entry.description} />}
-        {entry.signs && <DetailRow label="Signos" value={entry.signs} />}
-        {entry.note && <DetailRow label="Nota" value={entry.note} />}
-        {entry.diagnosis && <DetailRow label="Diagnóstico" value={entry.diagnosis} />}
-        {entry.treatment && <DetailRow label="Tratamiento" value={entry.treatment} />}
-        <DetailRow
-          label="Creado"
-          value={new Date(entry.createdAt).toLocaleString("es-AR")}
-        />
+      {/* Detalles */}
+      <div className="bg-[var(--color-surface)] border border-[var(--color-border-base)] rounded-xl shadow-md p-6 space-y-4 text-sm text-[var(--color-text)]">
+        {entry.date && (
+          <p>
+            <span className="font-medium">Fecha:</span>{" "}
+            {format(new Date(entry.date), "EEEE d 'de' MMMM yyyy", { locale: es })}
+          </p>
+        )}
+        <p><span className="font-medium">Motivo:</span> {entry.reason}</p>
+        <p><span className="font-medium">Síntomas:</span> {entry.symptoms}</p>
+        {entry.description && (
+          <p><span className="font-medium">Descripción:</span> {entry.description}</p>
+        )}
+        {entry.signs && (
+          <p><span className="font-medium">Signos:</span> {entry.signs}</p>
+        )}
+        {entry.note && (
+          <p><span className="font-medium">Nota:</span> {entry.note}</p>
+        )}
+        {entry.diagnosis && (
+          <p><span className="font-medium">Diagnóstico:</span> {entry.diagnosis}</p>
+        )}
+        {entry.treatment && (
+          <p><span className="font-medium">Tratamiento:</span> {entry.treatment}</p>
+        )}
+        {entry.createdAt && (
+          <p>
+            <span className="font-medium">Creado:</span>{" "}
+            {new Date(entry.createdAt).toLocaleString("es-AR")}
+          </p>
+        )}
       </div>
     </div>
-  )
-}
-
-function DetailRow({ label, value }: { label: string; value: string }) {
-  return (
-    <p className="text-sm text-[var(--color-text)]">
-      <span className="font-medium text-[var(--color-text-soft)]">{label}:</span> {value}
-    </p>
-  )
+  );
 }

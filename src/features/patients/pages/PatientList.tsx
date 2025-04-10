@@ -1,23 +1,22 @@
-import { useAuth } from "../../../features/auth/context/AuthContext";
-import ProCard from "../../../shared/ui/card/ProCard";
-import PatientFilters from "../components/PatientFilters";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
+import { useAuth } from "../../../features/auth/context/AuthContext";
 import { usePatients } from "../hooks/usePatients";
-import AddPatientButton from "../ui/AddPatientButton";
-import Spinner from "../../../shared/components/ui/Spinner";
+import PatientFilters from "../components/PatientFilters";
+import PatientListHeader from "../components/PatientListHeader";
+import PatientCardList from "../components/PatientCardList";
 
 export default function PatientList() {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const { patients, loading, deletePatient } = usePatients(user?.uid || "");
 
   const [nameQuery, setNameQuery] = useState("");
   const [dniQuery, setDniQuery] = useState("");
 
   const handleDelete = async (id: string) => {
-    const confirmDelete = confirm("¿Estás seguro que querés eliminar este paciente?");
+    const confirmDelete = confirm(
+      "¿Estás seguro que querés eliminar este paciente?"
+    );
     if (!confirmDelete) return;
 
     try {
@@ -37,9 +36,8 @@ export default function PatientList() {
   });
 
   return (
-    <div className=" max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold text-text mb-4">Mis pacientes</h1>
-      
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+      <PatientListHeader />
 
       <PatientFilters
         nameQuery={nameQuery}
@@ -48,77 +46,11 @@ export default function PatientList() {
         onDniChange={(e) => setDniQuery(e.target.value)}
       />
 
-      {loading ? (
-        <Spinner/>
-      ) : filteredPatients.length === 0 ? (
-        <p>No se encontraron pacientes con los filtros aplicados.</p>
-      ) : (
-
-
-        <div className="p-6 space-y-4">
-        <div className="flex justify-end items-center">
-          <AddPatientButton />
-        </div>
-        <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredPatients.map((patient) => (
-            <ProCard
-              key={patient.id}
-              title={`${patient.name} ${patient.lastName}`}
-              subtitle={`DNI: ${patient.dni}`}
-              actions={
-                <div className="flex flex-col gap-1 text-sm">
-                  <button
-                    onClick={() =>
-                      navigate(`/dashboard/profesional/pacientes/${patient.id}`)
-                    }
-                    className="text-primary hover:underline text-left"
-                  >
-                    Ver paciente
-                  </button>
-                  <button
-                    onClick={() =>
-                      navigate(`/dashboard/profesional/pacientes/${patient.id}/editar`)
-                    }
-                    className="text-primary hover:underline text-left"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => handleDelete(patient.id!)}
-                    className="text-destructive hover:underline text-left"
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              }
-            >
-              {patient.email && (
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-text">Email:</span> {patient.email}
-                </p>
-              )}
-              {patient.phone && (
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-text">Teléfono:</span> {patient.phone}
-                </p>
-              )}
-              <p className="text-sm text-muted-foreground">
-                <span className="font-medium text-text">Fecha de nacimiento:</span>{" "}
-                {patient.birthDate}
-              </p>
-              {patient.createdAt && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  Registrado el{" "}
-                  {new Date(patient.createdAt).toLocaleDateString("es-AR", {
-                    dateStyle: "medium",
-                  })}
-                </p>
-              )}
-            </ProCard>
-          ))}
-        </ul>
-        </div>
-      )}
+      <PatientCardList
+        patients={filteredPatients}
+        loading={loading}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }

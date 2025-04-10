@@ -98,24 +98,40 @@ export default function AppointmentsList() {
   });
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold text-text mb-4">Mis turnos</h1>
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+      <div className="border-b border-[var(--color-border-base)] pb-4">
+        <h1 className="text-3xl font-bold text-[var(--color-text)] leading-tight">
+          Mis turnos
+        </h1>
+        <p className="text-sm text-[var(--color-text-soft)] mt-1">
+          Filtrá y visualizá tus próximos turnos.
+        </p>
+      </div>
 
       <AppointmentsFilters
         filterDate={filterDate}
-        onDateChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterDate(e.target.value)}
+        onDateChange={(e) => setFilterDate(e.target.value)}
         patientQuery={patientQuery}
-        onPatientQueryChange={(e: React.ChangeEvent<HTMLInputElement>) => setPatientQuery(e.target.value)}
+        onPatientQueryChange={(e) => setPatientQuery(e.target.value)}
         dniQuery={dniQuery}
-        onDniQueryChange={(e: React.ChangeEvent<HTMLInputElement>) => setDniQuery(e.target.value)}
+        onDniQueryChange={(e) => setDniQuery(e.target.value)}
+        onClearFilters={() => {
+          setFilterDate("");
+          setPatientQuery("");
+          setDniQuery("");
+        }}
       />
 
       {loading ? (
-        <Spinner/>
+        <div className="min-h-[30vh] flex justify-center items-center">
+          <Spinner />
+        </div>
       ) : filteredAppointments.length === 0 ? (
-        <p>No se encontraron turnos con los filtros aplicados.</p>
+        <p className="text-[var(--color-text-soft)]">
+          No se encontraron turnos con los filtros aplicados.
+        </p>
       ) : (
-        <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredAppointments.map((appt) => (
             <ProCard
               key={appt.id}
@@ -125,20 +141,22 @@ export default function AppointmentsList() {
                 timeStyle: "short",
               })}
               actions={
-                <button className="text-sm text-primary hover:underline">
+                <button className="text-sm text-[var(--color-primary)] hover:underline">
                   Ver detalle
                 </button>
               }
             >
-              {appt.note && (
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-medium text-text">Nota:</span> {appt.note}
+              <div className="space-y-1 text-sm text-[var(--color-text-soft)]">
+                {appt.note && (
+                  <p>
+                    <span className="font-medium text-[var(--color-text)]">Nota:</span> {appt.note}
+                  </p>
+                )}
+                <p>
+                  <span className="font-medium text-[var(--color-text)]">DNI:</span>{" "}
+                  {appt.patient?.dni ?? "No informado"}
                 </p>
-              )}
-              <p className="text-sm text-muted-foreground">
-                <span className="font-medium text-text">DNI:</span>{" "}
-                {appt.patient?.dni ?? "No informado"}
-              </p>
+              </div>
             </ProCard>
           ))}
         </ul>

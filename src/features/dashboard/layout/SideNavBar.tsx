@@ -54,7 +54,7 @@ export default function SideNavBar({
     </motion.div>
   );
   return (
-    <aside className="w-full h-full bg-background flex flex-col justify-between shadow-sm">
+    <aside className="w-full h-full bg-background flex flex-col justify-between shadow-md">
       <div className="pt-5">
        
         {userData && (

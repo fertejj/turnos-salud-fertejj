@@ -12,7 +12,7 @@ export default function AuthLayout({ children }: Props) {
   return (
     <main className="min-h-screen bg-background flex flex-col">
       {/* Navbar */}
-      <nav className="w-full px-6 py-4 border-b border-border-base flex justify-between items-center bg-surface shadow-sm">
+      <nav className="w-full px-6 py-4 border-b border-border-base flex justify-between items-center bg-surface shadow-md">
         <div className="flex items-center gap-2">
           <FaHeartbeat className="text-xl text-primary" />
           <span className="text-primary-dark font-semibold">MiConsulta App</span>

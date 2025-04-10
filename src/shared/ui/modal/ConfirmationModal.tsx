@@ -1,40 +1,42 @@
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
 
-type Props = {
-  date: Date;
-  time: string;
-  onClose: () => void;
-  onConfirm: () => void;
-};
+interface Props {
+  open: boolean
+  title: string
+  description: string
+  onCancel: () => void
+  onConfirm: () => void
+}
 
-export default function ConfirmationModal({ date, time, onClose, onConfirm }: Props) {
-  const formatted = format(date, "EEEE d 'de' MMMM 'de' yyyy", { locale: es });
+export default function ConfirmationModal({
+  open,
+  title,
+  description,
+  onCancel,
+  onConfirm,
+}: Props) {
+  if (!open) return null
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-surface rounded shadow-lg p-6 w-full max-w-sm text-center border border-border-base">
-        <h2 className="text-xl font-semibold text-primary-dark mb-4">¡Turno reservado!</h2>
-        <p className="text-text mb-2">Tu turno fue registrado con éxito:</p>
-        <p className="text-lg font-medium text-text-main">
-          📅 {formatted.charAt(0).toUpperCase() + formatted.slice(1)} a las ⏰ {time} hs
-        </p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="bg-[var(--color-surface)] border border-[var(--color-border-base)] rounded-xl shadow-xl p-6 w-full max-w-md space-y-5">
+        <h2 className="text-xl font-semibold text-[var(--color-text)]">{title}</h2>
+        <p className="text-sm text-[var(--color-text-soft)]">{description}</p>
 
-        <div className="flex justify-center gap-4 mt-6">
+        <div className="flex justify-end gap-3 pt-2">
           <button
-            onClick={onConfirm}
-            className="bg-primary hover:bg-primary-dark text-white font-medium px-4 py-2 rounded transition"
+            onClick={onCancel}
+            className="px-4 py-2 text-sm rounded border border-[var(--color-border-base)] text-[var(--color-text)] hover:bg-[var(--color-hover-surface)] transition"
           >
-            Ir al panel
+            Cancelar
           </button>
           <button
-            onClick={onClose}
-            className="bg-hover-surface hover:bg-border-base text-soft px-4 py-2 rounded transition"
+            onClick={onConfirm}
+            className="px-4 py-2 text-sm rounded bg-[var(--color-error)] text-white hover:bg-red-600 transition"
           >
-            Cerrar
+            Confirmar
           </button>
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,6 +1,6 @@
 export type MedicalHistoryEntry = {
     id?: string
-    date: string // fecha de consulta (YYYY-MM-DD)
+    date: Date // fecha de consulta (YYYY-MM-DD)
     reason: string
     symptoms: string
     description: string

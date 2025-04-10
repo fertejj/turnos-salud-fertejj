@@ -1,15 +1,15 @@
 import { Pencil, Trash2, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import ConfirmationModal from "../../patients/ui/ConfirmationModal";
 import { useMedicalHistory } from "../hooks/useMedicalHistory";
 import { toast } from "react-hot-toast";
+import ConfirmationModal from "../../../shared/ui/modal/ConfirmationModal";
 
 interface Props {
   entryId: string;
   patientId: string;
   title: string;
-  date: string;
+  date: Date;
   note?: string;
 }
 
@@ -37,13 +37,17 @@ export default function MedicalHistoryItem({
   };
 
   return (
-    <div className="rounded-xl border border-[var(--color-border-base)] bg-[var(--color-surface)] p-4 shadow-sm space-y-2">
+    <div className="rounded-xl border border-[var(--color-border-base)] bg-[var(--color-surface)] p-4 shadow-md space-y-2">
       <div className="flex items-center justify-between">
-        <h3 className="text-base font-semibold text-[var(--color-text)]">{title}</h3>
+        <h3 className="text-base font-semibold text-[var(--color-text)]">
+          {title}
+        </h3>
         <div className="flex items-center gap-2">
           <button
             onClick={() =>
-              navigate(`/dashboard/profesional/pacientes/${patientId}/historia/${entryId}`)
+              navigate(
+                `/dashboard/profesional/pacientes/${patientId}/historia/${entryId}`
+              )
             }
             className="p-1 text-[var(--color-text-soft)] hover:text-[var(--color-text)] transition"
             title="Ver entrada"
@@ -52,7 +56,9 @@ export default function MedicalHistoryItem({
           </button>
           <button
             onClick={() =>
-              navigate(`/dashboard/profesional/pacientes/${patientId}/historia/${entryId}/editar`)
+              navigate(
+                `/dashboard/profesional/pacientes/${patientId}/historia/${entryId}/editar`
+              )
             }
             className="p-1 text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] transition"
             title="Editar entrada"
@@ -68,9 +74,20 @@ export default function MedicalHistoryItem({
           </button>
         </div>
       </div>
-      <p className="text-sm text-[var(--color-text-soft)]">Fecha: {date}</p>
+      <p className="text-sm text-[var(--color-text-soft)]">
+        Fecha:{" "}
+        {date.toLocaleDateString("es-AR", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
+      </p>
+
       {note && (
-        <p className="text-sm text-[var(--color-text)] leading-relaxed">{note}</p>
+        <p className="text-sm text-[var(--color-text)] leading-relaxed">
+          {note}
+        </p>
       )}
 
       <ConfirmationModal
