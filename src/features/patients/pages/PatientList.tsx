@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
 import { usePatients } from "../hooks/usePatients";
+import AddPatientButton from "../ui/AddPatientButton";
+import Spinner from "../../../shared/components/ui/Spinner";
 
 export default function PatientList() {
   const { user } = useAuth();
@@ -36,7 +38,8 @@ export default function PatientList() {
 
   return (
     <div className=" max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold text-primary mb-4">Mis pacientes</h1>
+      <h1 className="text-2xl font-semibold text-text mb-4">Mis pacientes</h1>
+      
 
       <PatientFilters
         nameQuery={nameQuery}
@@ -46,10 +49,16 @@ export default function PatientList() {
       />
 
       {loading ? (
-        <p>Cargando pacientes...</p>
+        <Spinner/>
       ) : filteredPatients.length === 0 ? (
         <p>No se encontraron pacientes con los filtros aplicados.</p>
       ) : (
+
+
+        <div className="p-6 space-y-4">
+        <div className="flex justify-end items-center">
+          <AddPatientButton />
+        </div>
         <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredPatients.map((patient) => (
             <ProCard
@@ -108,6 +117,7 @@ export default function PatientList() {
             </ProCard>
           ))}
         </ul>
+        </div>
       )}
     </div>
   );

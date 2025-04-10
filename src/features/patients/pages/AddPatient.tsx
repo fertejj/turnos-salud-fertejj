@@ -34,7 +34,7 @@ export default function AddPatient() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <h1 className="text-primary text-2xl font-semibold mb-4">Agregar nuevo paciente</h1>
+      <h1 className="text-text text-2xl font-semibold mb-4">Agregar nuevo paciente</h1>
       <PatientForm onSubmit={handleSubmit} onCancel={() => navigate(-1)} />
     </div>
   )

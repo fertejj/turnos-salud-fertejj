@@ -25,7 +25,7 @@ export default function WelcomeSection({ user }: Props) {
 
       {/* Texto de bienvenida */}
       <div>
-        <h1 className="text-2xl font-semibold text-primary-dark leading-snug">
+        <h1 className="text-2xl font-semibold text-text-dark leading-snug">
           ¡Bienvenido/a, {displayName}! 👋
         </h1>
         <p className="text-sm text-text-soft mt-1 max-w-md">

@@ -7,6 +7,7 @@ import { usePatients } from "../hooks/usePatients";
 import { Patient, FormData } from "../types";
 import { toast } from "react-hot-toast";
 import PatientForm from "../components/PatientForm";
+import Spinner from "../../../shared/components/ui/Spinner";
 
 export default function PatientEditPage() {
   const { id } = useParams();
@@ -58,7 +59,7 @@ export default function PatientEditPage() {
   if (loading) {
     return (
       <div className="p-6 max-w-2xl mx-auto">
-        <p className="text-muted-foreground text-sm">Cargando paciente...</p>
+        <Spinner/>
       </div>
     );
   }
@@ -73,7 +74,7 @@ export default function PatientEditPage() {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-semibold text-primary mb-4">Editar paciente</h1>
+      <h1 className="text-2xl font-semibold text-text mb-4">Editar paciente</h1>
       <PatientForm
         initialData={patient}
         onSubmit={handleUpdate}

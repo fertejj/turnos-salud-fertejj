@@ -10,6 +10,7 @@ import { useAuth } from "../../auth/context/AuthContext";
 import AppointmentsFilters from "../components/AppointmentFilters";
 import { getFirestoreInstance } from "../../../services/firebase/firestore";
 import ProCard from "../../../shared/ui/card/ProCard";
+import Spinner from "../../../shared/components/ui/Spinner";
 
 type Appointment = {
   id: string;
@@ -98,7 +99,7 @@ export default function AppointmentsList() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-2xl font-semibold text-primary mb-4">Mis turnos</h1>
+      <h1 className="text-2xl font-semibold text-text mb-4">Mis turnos</h1>
 
       <AppointmentsFilters
         filterDate={filterDate}
@@ -110,7 +111,7 @@ export default function AppointmentsList() {
       />
 
       {loading ? (
-        <p>Cargando...</p>
+        <Spinner/>
       ) : filteredAppointments.length === 0 ? (
         <p>No se encontraron turnos con los filtros aplicados.</p>
       ) : (

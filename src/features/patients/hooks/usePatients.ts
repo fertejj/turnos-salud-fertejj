@@ -9,6 +9,7 @@ import {
   onSnapshot,
   query,
   where,
+  getDoc,
 } from 'firebase/firestore'
 import { Patient } from '../types'
 import { getFirestoreInstance } from '../../../services/firebase/firestore'
@@ -65,11 +66,28 @@ export function usePatients(professionalId: string) {
     await deleteDoc(ref)
   }
 
+  const getPatientById = async (id: string): Promise<Patient | null> => {
+    const db = await getFirestoreInstance()
+    const ref = doc(db, 'patients', id)
+    const snap = await getDoc(ref)
+  
+    if (snap.exists()) {
+      return {
+        id: snap.id,
+        ...(snap.data() as Omit<Patient, 'id'>),
+      }
+    } else {
+      return null
+    }
+  }
+  
+
   return {
     patients,
     loading,
     addPatient,
     updatePatient,
     deletePatient,
+    getPatientById,
   }
 }

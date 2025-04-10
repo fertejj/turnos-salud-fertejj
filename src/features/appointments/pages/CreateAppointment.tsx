@@ -163,7 +163,7 @@ export default function CreateAppointment() {
 
   return (
     <div className="max-w-xl mx-auto">
-      <h1 className="text-2xl font-semibold text-primary mb-4">Nuevo turno</h1>
+      <h1 className="text-2xl font-semibold text-text mb-4">Nuevo turno</h1>
 
       {/* 🔍 Búsqueda de paciente */}
       <PatientSearch

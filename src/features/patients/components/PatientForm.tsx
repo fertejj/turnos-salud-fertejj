@@ -13,6 +13,7 @@ const schema = z.object({
   birthDate: z.string().min(1, "La fecha de nacimiento es requerida"),
   gender: z.enum(["Masculino", "Femenino", "Otro"]),
   insurance: z.string().optional(),
+  address: z.string().optional(), // ✅ nuevo campo
 });
 
 type FormData = Omit<Patient, "id" | "createdAt" | "professionalId">;
@@ -43,6 +44,7 @@ export default function PatientForm({
       birthDate: initialData?.birthDate || "",
       gender: initialData?.gender || "Otro",
       insurance: initialData?.insurance || "",
+      address: initialData?.address || "", // ✅ nuevo campo
     },
   });
 
@@ -51,7 +53,7 @@ export default function PatientForm({
       onSubmit={handleSubmit(onSubmit)}
       className="bg-[var(--color-surface)] border border-[var(--color-border-base)] rounded-xl shadow-md p-6 space-y-6 max-w-3xl mx-auto"
     >
-      <h2 className="text-xl font-semibold text-primary">
+      <h2 className="text-xl font-semibold text-text">
         Información del paciente
       </h2>
 
@@ -118,6 +120,16 @@ export default function PatientForm({
             <option value="Femenino">Femenino</option>
             <option value="Otro">Otro</option>
           </select>
+        </div>
+        <div className="md:col-span-2">
+          <label className="text-sm font-medium text-[var(--color-text)] mb-1 block">
+            Dirección
+          </label>
+          <Input
+            {...register("address")}
+            hasError={!!errors.address}
+            errorMessage={errors.address?.message}
+          />
         </div>
 
         {/* Cobertura médica */}
