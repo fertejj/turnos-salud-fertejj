@@ -7,6 +7,7 @@ import AppointmentForm from "../components/AppointmentForm";
 import PatientResultList from "../components/PatientResultList";
 import { usePatientSearch } from "../hooks/usePatientSearch";
 import { useAppointmentForm } from "../hooks/useAppointmentForm";
+import Spinner from "../../../shared/components/ui/Spinner";
 
 export default function CreateAppointment() {
   const { user } = useAuth();
@@ -50,9 +51,7 @@ export default function CreateAppointment() {
       />
 
       {loading && (
-        <p className="text-sm text-[var(--color-text-soft)]">
-          Buscando paciente...
-        </p>
+        <Spinner />
       )}
 
       {patients.length > 0 && !selectedPatient && (

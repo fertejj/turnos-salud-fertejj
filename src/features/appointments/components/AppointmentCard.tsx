@@ -38,7 +38,7 @@ export default function AppointmentCard({ id, date, note, patient }: Props) {
     : "No informado"
 
   const formattedDate = format(date, "dd/MM/yyyy - HH:mm", { locale: es })
-
+console.log("fecha de card:" + date)
   return (
     <ProCard
       key={id}

@@ -1,11 +1,10 @@
-import Spinner from "../../../shared/components/ui/Spinner";
-import { useAppointments } from "../hooks/useAppointments";
-import AppointmentListHeader from "../components/AppointmentListHeader";
-import AppointmentCard from "../components/AppointmentCard";
-
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
-import AppointmentsFilterPanel from "../components/AppointmentFilterPanel";
+import Spinner from "../../../shared/components/ui/Spinner"
+import { useAppointments } from "../hooks/useAppointments"
+import AppointmentListHeader from "../components/AppointmentListHeader"
+import AppointmentCard from "../components/AppointmentCard"
+import { formatInTimeZone } from "date-fns-tz"
+import { es } from "date-fns/locale"
+import AppointmentsFilterPanel from "../components/AppointmentFilterPanel"
 
 export default function AppointmentsList() {
   const {
@@ -18,21 +17,24 @@ export default function AppointmentsList() {
     setPatientQuery,
     setDniQuery,
     clearFilters,
-  } = useAppointments();
+  } = useAppointments()
 
-  // Agrupar turnos por fecha
+  // Agrupar turnos por fecha argentina
   const groupedByDate = filteredAppointments.reduce<
-  Record<string, typeof filteredAppointments>
+    Record<string, typeof filteredAppointments>
   >((acc, appt) => {
-    const dateKey = appt.date.toISOString().slice(0, 10);
-    if (!acc[dateKey]) acc[dateKey] = [];
-    acc[dateKey].push(appt);
-    return acc;
-  }, {});
-  
+    const dateKey = formatInTimeZone(
+      appt.date,
+      "America/Argentina/Buenos_Aires",
+      "yyyy-MM-dd"
+    )
+    if (!acc[dateKey]) acc[dateKey] = []
+    acc[dateKey].push(appt)
+    return acc
+  }, {})
 
   // Ordenar las fechas
-  const sortedDates = Object.keys(groupedByDate).sort();
+  const sortedDates = Object.keys(groupedByDate).sort()
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
@@ -59,22 +61,27 @@ export default function AppointmentsList() {
       ) : (
         <div className="space-y-8">
           {sortedDates.map((dateKey) => {
-            const date = format(new Date(dateKey), "EEEE dd 'de' MMMM", {
-              locale: es,
-            });
+            console.log(dateKey)
+            const dateFormatted = formatInTimeZone(
+              new Date(dateKey),
+              "",
+              "EEEE d 'de' MMMM",
+              {
+                locale: es,
+              }
+            )
+
             const appointments = groupedByDate[dateKey].sort(
               (a, b) => a.date.getTime() - b.date.getTime()
-            );
-            
+            )
 
             return (
               <div key={dateKey} className="space-y-4">
                 <h3 className="text-lg font-semibold text-primary-dark border-b border-border-base pb-1">
-                  {date.charAt(0).toUpperCase() + date.slice(1)}
+                  {dateFormatted.charAt(0).toUpperCase() + dateFormatted.slice(1)}
                 </h3>
                 <ul className="space-y-3">
                   {appointments.map((appt) => (
-                    
                     <AppointmentCard
                       key={appt.id}
                       id={appt.id}
@@ -85,10 +92,10 @@ export default function AppointmentsList() {
                   ))}
                 </ul>
               </div>
-            );
+            )
           })}
         </div>
       )}
     </div>
-  );
+  )
 }

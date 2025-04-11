@@ -2,7 +2,9 @@ import Input from "../../../shared/components/ui/Input";
 
 type Props = {
   form: { date: Date; time: string; note: string };
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   onSubmit: () => void;
   submitting: boolean;
 };
@@ -27,12 +29,7 @@ export default function AppointmentForm({
 
       <div>
         <label className="text-sm font-medium">Hora</label>
-        <Input
-          type="time"
-          name="time"
-          value={form.time}
-          onChange={onChange}
-        />
+        <Input type="time" name="time" value={form.time} onChange={onChange} />
       </div>
 
       <div>

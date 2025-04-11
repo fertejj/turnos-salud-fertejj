@@ -30,7 +30,7 @@ export function useAppointmentForm(userId: string | undefined, selectedPatient: 
     const [hour, minute] = form.time.split(":");
     const fullDate = new Date(form.date);
     fullDate.setHours(+hour, +minute);
-
+    
     setSubmitting(true);
     try {
       const db = await getFirestoreInstance();
@@ -38,19 +38,20 @@ export function useAppointmentForm(userId: string | undefined, selectedPatient: 
         professionalId: userId,
         patientId: selectedPatient.id,
         patientName: selectedPatient.name,
-        date: selectedPatient.fullDate,
+        date: fullDate, // ✅ ahora sí estás usando la fecha con hora
         note: form.note,
-        createdAt: new Date ()
+        createdAt: new Date(),
       });
-
+    
       alert("Turno creado correctamente");
-      resetPatientForm(); // reset seleccionado
+      resetPatientForm();
       setForm({ date: new Date(), time: "", note: "" });
     } catch (err) {
       console.error("Error al crear turno:", err);
     } finally {
       setSubmitting(false);
     }
+    
   };
 
   return {
