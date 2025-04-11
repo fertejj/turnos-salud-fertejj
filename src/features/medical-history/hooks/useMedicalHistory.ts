@@ -12,13 +12,13 @@ import {
 } from "firebase/firestore"
 import { getFirestoreInstance } from "../../../services/firebase/firestore"
 import { MedicalHistoryEntry } from "../types/MedicalHistoryEntry"
+import { safeToDate } from "../../../shared/utils/safeToDate"
 
 export function useMedicalHistory(patientId: string | undefined) {
   const [entries, setEntries] = useState<MedicalHistoryEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Fetch realtime history
   useEffect(() => {
     if (!patientId) return
 
@@ -33,10 +33,23 @@ export function useMedicalHistory(patientId: string | undefined) {
         )
 
         unsubscribe = onSnapshot(q, (snapshot) => {
-          const result: MedicalHistoryEntry[] = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...(doc.data() as Omit<MedicalHistoryEntry, "id">),
-          }))
+          const result: MedicalHistoryEntry[] = snapshot.docs.map((doc) => {
+            const data = doc.data()
+
+            return {
+              id: doc.id,
+              reason: data.reason,
+              symptoms: data.symptoms,
+              diagnosis: data.diagnosis,
+              note: data.note,
+              signs: data.signs,
+              treatment: data.treatment,
+              createdBy: data.createdBy,
+              date: safeToDate(data.date),
+              createdAt: safeToDate(data.createdAt),
+            }
+          })
+
           setEntries(result)
           setLoading(false)
         })
@@ -60,7 +73,7 @@ export function useMedicalHistory(patientId: string | undefined) {
     const ref = collection(db, "patients", patientId, "medicalHistory")
     const newEntry = {
       ...entry,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date(),
     }
     await addDoc(ref, newEntry)
   }
@@ -85,14 +98,23 @@ export function useMedicalHistory(patientId: string | undefined) {
     const ref = doc(db, "patients", patientId, "medicalHistory", entryId)
     const snap = await getDoc(ref)
     if (snap.exists()) {
+      const data = snap.data()
       return {
         id: snap.id,
-        ...(snap.data() as Omit<MedicalHistoryEntry, "id">),
+        reason: data.reason,
+        symptoms: data.symptoms,
+        diagnosis: data.diagnosis,
+        note: data.note,
+        signs: data.signs,
+        treatment: data.treatment,
+        createdBy: data.createdBy,
+        date: safeToDate(data.date),
+        createdAt: safeToDate(data.createdAt),
       }
     }
     return null
   }
-  
+
   return {
     entries,
     loading,
@@ -100,6 +122,6 @@ export function useMedicalHistory(patientId: string | undefined) {
     addEntry,
     updateEntry,
     deleteEntry,
-    getEntryById
+    getEntryById,
   }
 }

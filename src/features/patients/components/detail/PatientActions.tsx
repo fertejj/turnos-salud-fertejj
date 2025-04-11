@@ -1,8 +1,8 @@
-// src/features/patients/components/PatientActions.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "react-hot-toast";
+
 import ConfirmationModal from "../../../../shared/ui/modal/ConfirmationModal";
 import { useAuth } from "../../../auth/context/AuthContext";
 import { usePatients } from "../../hooks/usePatients";
@@ -10,7 +10,7 @@ import { usePatients } from "../../hooks/usePatients";
 type Props = {
   patientId: string;
   onDelete: () => void;
-}
+};
 
 export default function PatientActions({ patientId }: Props) {
   const navigate = useNavigate();
@@ -31,20 +31,20 @@ export default function PatientActions({ patientId }: Props) {
 
   return (
     <>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col sm:flex-row gap-3">
         <button
           onClick={() => navigate(`/dashboard/profesional/pacientes/${patientId}/editar`)}
-          className="inline-flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)] transition-all"
+          className="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold bg-[var(--color-primary)] text-white shadow hover:bg-[var(--color-primary-dark)] transition"
         >
-          <Pencil size={16} />
-          Editar
+          <Pencil size={18} />
+          Editar paciente
         </button>
         <button
           onClick={() => setShowModal(true)}
-          className="inline-flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium bg-[var(--color-error)] text-white hover:bg-red-600 transition-all"
+          className="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold bg-[var(--color-error)] text-white shadow hover:bg-red-600 transition"
         >
-          <Trash2 size={16} />
-          Eliminar
+          <Trash2 size={18} />
+          Eliminar paciente
         </button>
       </div>
 

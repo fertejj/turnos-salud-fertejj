@@ -51,15 +51,25 @@ export default function PatientDetail() {
   if (!patient) return null;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-10 bg-[var(--color-background)]">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--color-border-base)] pb-6">
+    <section className="max-w-6xl mx-auto px-6 py-10 space-y-12 bg-[var(--color-background)]">
+      {/* Header */}
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-[var(--color-border-base)]">
         <PatientDetailHeader id={id!} />
         <PatientActions patientId={id!} onDelete={() => setShowModal(true)} />
+      </header>
+
+      {/* Info + Contacto */}
+      <div className="grid gap-6">
+        <PatientInfoSection patient={patient} />
       </div>
 
-      <PatientInfoSection patient={patient} />
-      <PatientMedicalHistory patientId={id!} />
+      {/* Historia Clínica */}
+      <div >
 
+        <PatientMedicalHistory patientId={id!} />
+      </div>
+
+      {/* Modal de Confirmación */}
       <ConfirmationModal
         open={showModal}
         title="Eliminar paciente"
@@ -67,6 +77,6 @@ export default function PatientDetail() {
         onCancel={() => setShowModal(false)}
         onConfirm={handleDelete}
       />
-    </div>
+    </section>
   );
 }

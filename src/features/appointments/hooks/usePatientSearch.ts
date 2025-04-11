@@ -5,8 +5,11 @@ import {
   where,
   getDocs,
   addDoc,
-  Timestamp,
 } from "firebase/firestore";
+
+
+
+
 import { getFirestoreInstance } from "../../../services/firebase/firestore";
 
 export function usePatientSearch(professionalId: string) {
@@ -80,7 +83,7 @@ export function usePatientSearch(professionalId: string) {
         ...newPatient,
         dni: currentName.trim(),
         professionalId,
-        createdAt: Timestamp.now(),
+        createdAt: new Date ()
       });
 
       setSelectedPatient({ id: docRef.id, ...newPatient, dni: currentName.trim() });

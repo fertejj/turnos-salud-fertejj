@@ -37,7 +37,9 @@ export default function MedicalHistoryDetailPage() {
         <div className="flex gap-2">
           <button
             onClick={() =>
-              navigate(`/dashboard/profesional/pacientes/${patientId}/historia/${entryId}/editar`)
+              navigate(
+                `/dashboard/profesional/pacientes/${patientId}/historia/${entryId}/editar`
+              )
             }
             className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)] transition"
           >
@@ -58,30 +60,49 @@ export default function MedicalHistoryDetailPage() {
         {entry.date && (
           <p>
             <span className="font-medium">Fecha:</span>{" "}
-            {format(new Date(entry.date), "EEEE d 'de' MMMM yyyy", { locale: es })}
+            {format(new Date(entry.date), "EEEE d 'de' MMMM yyyy", {
+              locale: es,
+            })}
           </p>
         )}
-        <p><span className="font-medium">Motivo:</span> {entry.reason}</p>
-        <p><span className="font-medium">Síntomas:</span> {entry.symptoms}</p>
+        <p>
+          <span className="font-medium">Motivo:</span> {entry.reason}
+        </p>
+        <p>
+          <span className="font-medium">Síntomas:</span> {entry.symptoms}
+        </p>
         {entry.description && (
-          <p><span className="font-medium">Descripción:</span> {entry.description}</p>
+          <p>
+            <span className="font-medium">Descripción:</span>{" "}
+            {entry.description}
+          </p>
         )}
         {entry.signs && (
-          <p><span className="font-medium">Signos:</span> {entry.signs}</p>
+          <p>
+            <span className="font-medium">Signos:</span> {entry.signs}
+          </p>
         )}
         {entry.note && (
-          <p><span className="font-medium">Nota:</span> {entry.note}</p>
+          <p>
+            <span className="font-medium">Nota:</span> {entry.note}
+          </p>
         )}
         {entry.diagnosis && (
-          <p><span className="font-medium">Diagnóstico:</span> {entry.diagnosis}</p>
+          <p>
+            <span className="font-medium">Diagnóstico:</span> {entry.diagnosis}
+          </p>
         )}
         {entry.treatment && (
-          <p><span className="font-medium">Tratamiento:</span> {entry.treatment}</p>
+          <p>
+            <span className="font-medium">Tratamiento:</span> {entry.treatment}
+          </p>
         )}
         {entry.createdAt && (
           <p>
             <span className="font-medium">Creado:</span>{" "}
-            {new Date(entry.createdAt).toLocaleString("es-AR")}
+            {format(new Date(entry.createdAt), "dd/MM/yyyy HH:mm", {
+              locale: es,
+            })}
           </p>
         )}
       </div>

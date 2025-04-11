@@ -16,6 +16,9 @@ import QuickActions from "../components/QuickActions";
 import InfoCards from "../components/InfoCards";
 
 import type { ProfessionalUser } from "../types/user";
+import { safeToDate } from "../../../shared/utils/safeToDate";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 type Turno = {
   date: Date;
@@ -47,12 +50,11 @@ export default function ProfesionalDashboard() {
       const snap = await getDocs(q);
       const data = snap.docs[0]?.data();
 
-      if (data && data.date?.toDate) {
-        const dateObj = data.date.toDate();
-        const time = dateObj.toLocaleTimeString("es-AR", {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
+      if (data?.date) {
+        const dateObj = safeToDate(data.date);
+
+        const time = format(dateObj, "HH:mm", { locale: es });
+
 
         setNextAppointment({
           date: dateObj,

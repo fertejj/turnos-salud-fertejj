@@ -5,9 +5,11 @@ import { z } from "zod"
 import { useMedicalHistory } from "../hooks/useMedicalHistory"
 import { toast } from "react-hot-toast"
 import { format } from "date-fns"
+import { useAuth } from "../../auth/context/AuthContext"
+import type { MedicalHistoryEntry } from "../types/MedicalHistoryEntry"
 
 const schema = z.object({
-  date: z.string().min(1, "La fecha es obligatoria"),
+  date: z.string().min(1, "La fecha es obligatoria"), // yyyy-MM-dd
   reason: z.string().min(1, "El motivo es obligatorio"),
   symptoms: z.string().min(1, "Los síntomas son obligatorios"),
   description: z.string().optional(),
@@ -22,15 +24,7 @@ type FormData = z.infer<typeof schema>
 export default function MedicalHistoryFormPage() {
   const { patientId } = useParams()
   const navigate = useNavigate()
-
-  if (!patientId) {
-    return (
-      <div className="p-6 text-center">
-        <p className="text-sm text-[var(--color-error)]">Paciente no encontrado.</p>
-      </div>
-    )
-  }
-
+  const { user } = useAuth()
   const { addEntry } = useMedicalHistory(patientId)
 
   const {
@@ -44,16 +38,32 @@ export default function MedicalHistoryFormPage() {
       reason: "",
       symptoms: "",
       description: "",
-      signs: "",
       note: "",
+      signs: "",
       diagnosis: "",
       treatment: "",
     },
   })
 
-  const onSubmit = async (data: any) => {
+  if (!patientId) {
+    return (
+      <div className="p-6 text-center">
+        <p className="text-sm text-[var(--color-error)]">
+          Paciente no encontrado.
+        </p>
+      </div>
+    )
+  }
+
+  const onSubmit = async (data: FormData) => {
     try {
-      await addEntry(data)
+      const parsedData: Omit<MedicalHistoryEntry, "id" | "createdAt"> = {
+        ...data,
+        date: new Date(data.date), // ← convierte string "yyyy-MM-dd" a Date
+        createdBy: user?.uid ?? "desconocido",
+      }
+
+      await addEntry(parsedData)
       toast.success("Entrada agregada con éxito")
       navigate(`/dashboard/profesional/pacientes/${patientId}`)
     } catch (error) {
@@ -71,23 +81,30 @@ export default function MedicalHistoryFormPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Fecha */}
         <div>
-          <label className="block text-sm font-medium text-[var(--color-text)] mb-1">Fecha de consulta</label>
+          <label className="block text-sm font-medium text-[var(--color-text)] mb-1">
+            Fecha de consulta
+          </label>
           <input
             type="date"
             {...register("date")}
             className="w-full border border-[var(--color-border-base)] rounded px-3 py-2 text-sm bg-[var(--color-surface)] text-[var(--color-text)]"
           />
-          {errors.date && <p className="text-sm text-[var(--color-error)] mt-1">{errors.date.message}</p>}
+          {errors.date && (
+            <p className="text-sm text-[var(--color-error)] mt-1">
+              {errors.date.message}
+            </p>
+          )}
         </div>
 
         {/* Campos obligatorios */}
         {[
-
           { name: "reason", label: "Motivo de la consulta" },
           { name: "symptoms", label: "Síntomas" },
         ].map(({ name, label }) => (
           <div key={name}>
-            <label className="block text-sm font-medium text-[var(--color-text)] mb-1">{label}</label>
+            <label className="block text-sm font-medium text-[var(--color-text)] mb-1">
+              {label}
+            </label>
             <input
               type="text"
               {...register(name as keyof FormData)}
@@ -101,17 +118,18 @@ export default function MedicalHistoryFormPage() {
           </div>
         ))}
 
-        
-
-        {/* Campos opcionales (textarea) */}
-        {[{ name: "description", label: "Descripción de la consulta" },
+        {/* Campos opcionales */}
+        {[
+          { name: "description", label: "Descripción de la consulta" },
           { name: "note", label: "Nota" },
           { name: "signs", label: "Signos" },
           { name: "diagnosis", label: "Diagnóstico" },
           { name: "treatment", label: "Tratamiento" },
         ].map(({ name, label }) => (
           <div key={name}>
-            <label className="block text-sm font-medium text-[var(--color-text)] mb-1">{label}</label>
+            <label className="block text-sm font-medium text-[var(--color-text)] mb-1">
+              {label}
+            </label>
             <textarea
               rows={4}
               {...register(name as keyof FormData)}

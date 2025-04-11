@@ -22,13 +22,14 @@ export default function AppointmentsList() {
 
   // Agrupar turnos por fecha
   const groupedByDate = filteredAppointments.reduce<
-    Record<string, typeof filteredAppointments>
+  Record<string, typeof filteredAppointments>
   >((acc, appt) => {
-    const dateKey = appt.date.toDate().toISOString().slice(0, 10);
+    const dateKey = appt.date.toISOString().slice(0, 10);
     if (!acc[dateKey]) acc[dateKey] = [];
     acc[dateKey].push(appt);
     return acc;
   }, {});
+  
 
   // Ordenar las fechas
   const sortedDates = Object.keys(groupedByDate).sort();
@@ -62,8 +63,9 @@ export default function AppointmentsList() {
               locale: es,
             });
             const appointments = groupedByDate[dateKey].sort(
-              (a, b) => a.date.toDate().getTime() - b.date.toDate().getTime()
+              (a, b) => a.date.getTime() - b.date.getTime()
             );
+            
 
             return (
               <div key={dateKey} className="space-y-4">
@@ -72,6 +74,7 @@ export default function AppointmentsList() {
                 </h3>
                 <ul className="space-y-3">
                   {appointments.map((appt) => (
+                    
                     <AppointmentCard
                       key={appt.id}
                       id={appt.id}

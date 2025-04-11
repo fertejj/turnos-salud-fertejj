@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import ProCard from "../../../../shared/ui/card/ProCard";
 import ActionButton from "../shared/ActionButton";
 import ActionGroup from "../shared/ActionGroup";
+import { es } from "date-fns/locale";
+import { format } from "date-fns";
 
 type Props = {
   patient: any;
@@ -12,9 +14,8 @@ type Props = {
 export default function PatientCard({ patient, onDelete }: Props) {
   const navigate = useNavigate();
 
-  const formattedDate = new Date(patient.createdAt).toLocaleDateString("es-AR", {
-    dateStyle: "medium",
-  });
+  const formattedDate = format(new Date(patient.createdAt), "dd/MM/yyyy", { locale: es })
+
 
   return (
     <ProCard

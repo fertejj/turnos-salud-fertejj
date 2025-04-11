@@ -1,104 +1,109 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 import {
   collection,
   getDocs,
   query,
   where,
   Timestamp,
-} from "firebase/firestore";
-import { getFirestoreInstance } from "../../../services/firebase/firestore";
-import { useAuth } from "../../auth/context/AuthContext";
+} from "firebase/firestore"
+import { getFirestoreInstance } from "../../../services/firebase/firestore"
+import { useAuth } from "../../auth/context/AuthContext"
 
 export type Appointment = {
-  id: string;
-  patientId: string;
-  date: Timestamp;
-  note?: string;
+  id: string
+  patientId: string
+  date: Date
+  note?: string
   patient?: {
-    name: string;
-    dni?: string;
-    email: string;
-  };
-};
+    name: string
+    dni?: string
+    email: string
+  }
+}
 
 export function useAppointments() {
-  const { user } = useAuth();
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filterDate, setFilterDate] = useState("");
-  const [patientQuery, setPatientQuery] = useState("");
-  const [dniQuery, setDniQuery] = useState("");
+  const { user } = useAuth()
+  const [appointments, setAppointments] = useState<Appointment[]>([])
+  const [loading, setLoading] = useState(true)
+  const [filterDate, setFilterDate] = useState("")
+  const [patientQuery, setPatientQuery] = useState("")
+  const [dniQuery, setDniQuery] = useState("")
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) return
 
     const fetchAppointments = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
-        const db = await getFirestoreInstance();
+        const db = await getFirestoreInstance()
 
         const patientsSnap = await getDocs(
           query(
             collection(db, "patients"),
             where("professionalId", "==", user.uid)
           )
-        );
+        )
 
         const patients = patientsSnap.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        })) as any[];
+        })) as any[]
 
-        const patientIds = patients.map((p) => p.id);
-        const patientMap = Object.fromEntries(patients.map((p) => [p.id, p]));
+        const patientIds = patients.map((p) => p.id)
+        const patientMap = Object.fromEntries(patients.map((p) => [p.id, p]))
 
         if (patientIds.length === 0) {
-          setAppointments([]);
-          setLoading(false);
-          return;
+          setAppointments([])
+          setLoading(false)
+          return
         }
 
-        const appointmentsSnap = await getDocs(collection(db, "appointments"));
-        const allAppointments = appointmentsSnap.docs
-          .map((doc) => ({ id: doc.id, ...doc.data() }))
-          .filter((appt: any) => patientIds.includes(appt.patientId))
-          .map((appt: any) => ({
-            ...appt,
-            patient: patientMap[appt.patientId],
-          }));
+        const appointmentsSnap = await getDocs(collection(db, "appointments"))
+        const allAppointments: Appointment[] = appointmentsSnap.docs
+          .map((doc) => {
+            const data = doc.data()
+            return {
+              id: doc.id,
+              patientId: data.patientId,
+              date: (data.date as Timestamp).toDate(),
+              note: data.note,
+              patient: patientMap[data.patientId],
+            }
+          })
+          .filter((appt) => patientIds.includes(appt.patientId))
 
-        setAppointments(allAppointments);
+        setAppointments(allAppointments)
       } catch (err) {
-        console.error("Error cargando turnos:", err);
+        console.error("Error cargando turnos:", err)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchAppointments();
-  }, [user]);
+    fetchAppointments()
+  }, [user])
 
   const filteredAppointments = appointments.filter((appt) => {
     const matchesDate = filterDate
-      ? appt.date.toDate().toISOString().slice(0, 10) === filterDate
-      : true;
+      ? appt.date.toISOString().slice(0, 10) === filterDate
+      : true
 
     const matchesPatient = patientQuery
       ? appt.patient?.name.toLowerCase().includes(patientQuery.toLowerCase())
-      : true;
+      : true
 
     const matchesDni = dniQuery
       ? appt.patient?.dni?.includes(dniQuery)
-      : true;
+      : true
 
-    return matchesDate && matchesPatient && matchesDni;
-  });
+    return matchesDate && matchesPatient && matchesDni
+  })
 
   const clearFilters = () => {
-    setFilterDate("");
-    setPatientQuery("");
-    setDniQuery("");
-  };
+    setFilterDate("")
+    setPatientQuery("")
+    setDniQuery("")
+  }
 
   return {
     loading,
@@ -111,5 +116,5 @@ export function useAppointments() {
     dniQuery,
     setDniQuery,
     clearFilters,
-  };
+  }
 }

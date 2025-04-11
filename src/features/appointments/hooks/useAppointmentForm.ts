@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Timestamp, addDoc, collection } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { getFirestoreInstance } from "../../../services/firebase/firestore";
 
 export function useAppointmentForm(userId: string | undefined, selectedPatient: any, resetPatientForm: () => void) {
@@ -38,9 +38,9 @@ export function useAppointmentForm(userId: string | undefined, selectedPatient: 
         professionalId: userId,
         patientId: selectedPatient.id,
         patientName: selectedPatient.name,
-        date: Timestamp.fromDate(fullDate),
+        date: selectedPatient.fullDate,
         note: form.note,
-        createdAt: Timestamp.now(),
+        createdAt: new Date ()
       });
 
       alert("Turno creado correctamente");
