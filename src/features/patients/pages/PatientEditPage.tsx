@@ -6,8 +6,8 @@ import { useAuth } from "../../auth/context/AuthContext";
 import { usePatients } from "../hooks/usePatients";
 import { Patient, FormData } from "../types";
 import { toast } from "react-hot-toast";
-import PatientForm from "../components/PatientForm";
 import Spinner from "../../../shared/components/ui/Spinner";
+import PatientForm from "../components/form/PatientForm";
 
 export default function PatientEditPage() {
   const { id } = useParams();
@@ -78,8 +78,8 @@ export default function PatientEditPage() {
       <PatientForm
         initialData={patient}
         onSubmit={handleUpdate}
-        onCancel={() => navigate("/dashboard/profesional/pacientes")}
+        onCancel={() => navigate(`/dashboard/profesional/pacientes/${patient.id}`)}
       />
     </div>
   );
-}
+} 

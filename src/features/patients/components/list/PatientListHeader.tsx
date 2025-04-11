@@ -1,4 +1,4 @@
-import AddPatientButton from "../ui/AddPatientButton";
+import AddPatientButton from "../../ui/AddPatientButton";
 
 export default function PatientListHeader() {
   return (

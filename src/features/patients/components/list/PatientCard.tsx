@@ -1,8 +1,8 @@
 import { Eye, Pencil, Trash2, Mail, Phone, Calendar, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import ProCard from "../../../shared/ui/card/ProCard";
-import ActionButton from "./ActionButton";
-import ActionGroup from "./ActionGroup";
+import ProCard from "../../../../shared/ui/card/ProCard";
+import ActionButton from "../shared/ActionButton";
+import ActionGroup from "../shared/ActionGroup";
 
 type Props = {
   patient: any;

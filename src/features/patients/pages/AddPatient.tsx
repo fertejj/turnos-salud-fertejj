@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
-import PatientForm from "../components/PatientForm"
 import { Patient, FormData } from "../types"
 import { usePatients } from "../hooks/usePatients"
 import { useAuth } from "../../auth/context/AuthContext"
+import PatientForm from "../components/form/PatientForm"
 
 export default function AddPatient() {
   const navigate = useNavigate();

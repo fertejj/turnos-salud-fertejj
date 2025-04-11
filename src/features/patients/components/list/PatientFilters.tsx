@@ -1,4 +1,4 @@
-import Input from "../../../shared/components/ui/Input";
+import Input from "../../../../shared/components/ui/Input";
 
 interface PatientFiltersProps {
   nameQuery: string;

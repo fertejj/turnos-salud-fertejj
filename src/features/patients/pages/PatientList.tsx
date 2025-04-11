@@ -2,9 +2,9 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../../../features/auth/context/AuthContext";
 import { usePatients } from "../hooks/usePatients";
-import PatientFilters from "../components/PatientFilters";
-import PatientListHeader from "../components/PatientListHeader";
-import PatientCardList from "../components/PatientCardList";
+import PatientFilters from "../components/list/PatientFilters";
+import PatientListHeader from "../components/list/PatientListHeader";
+import PatientCardList from "../components/list/PatientCardList";
 
 export default function PatientList() {
   const { user } = useAuth();
