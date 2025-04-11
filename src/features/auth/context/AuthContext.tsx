@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import type { User } from "firebase/auth";
-import type { Firestore } from "firebase/firestore";
+import { getAuth, onAuthStateChanged, type User } from "firebase/auth";
+import { doc, getDoc, getFirestore, type Firestore } from "firebase/firestore";
 import { firebaseConfig } from "../../../services/firebase/config"; // ✅ ruta corregida
+import { initializeApp } from "firebase/app";
 
 type UserData = {
   role: string;
@@ -31,9 +32,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const initAuth = async () => {
       try {
-        const { initializeApp } = await import("firebase/app");
-        const { getAuth, onAuthStateChanged } = await import("firebase/auth");
-        const { getFirestore, doc, getDoc } = await import("firebase/firestore/lite");
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);

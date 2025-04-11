@@ -8,6 +8,7 @@
   --color-success: #10b981;         /* Verde esmeralda (éxito, positivo) */
   --color-warning: #f59e0b;         /* Amarillo dorado (advertencia amigable) */
   --color-error: #ef4444;           /* Rojo moderno (errores claros) */
+  --color-destructive: #dc2626;     /* Rojo fuerte para acciones destructivas */
 
   --color-text: #111827;            /* Gris muy oscuro (texto principal) */
   --color-text-soft: #6b7280;       /* Gris medio (texto secundario) */

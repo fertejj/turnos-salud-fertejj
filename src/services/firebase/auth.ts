@@ -1,8 +1,13 @@
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { firebaseConfig } from "./config";
 
-export const getAuthInstance = async () => {
-  const { initializeApp } = await import("firebase/app");
-  const { getAuth } = await import("firebase/auth");
-  const app = initializeApp(firebaseConfig);
-  return getAuth(app);
+let authInstance: ReturnType<typeof getAuth> | null = null;
+
+export const getAuthInstance = () => {
+  if (!authInstance) {
+    const app = initializeApp(firebaseConfig);
+    authInstance = getAuth(app);
+  }
+  return authInstance;
 };

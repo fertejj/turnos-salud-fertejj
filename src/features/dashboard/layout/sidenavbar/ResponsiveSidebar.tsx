@@ -1,7 +1,7 @@
-import SideNavBar from "./SideNavBar";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ProfessionalUser } from "../types/user";
+import { ProfessionalUser } from "../../types/user";
+import SideNavBar from "./SideNavBar";
 
 interface ResponsiveSidebarProps {
   isOpen: boolean;
@@ -14,9 +14,6 @@ export default function ResponsiveSidebar({
   setIsOpen,
   userData,
 }: ResponsiveSidebarProps) {
-
-
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -26,7 +23,7 @@ export default function ResponsiveSidebar({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className=" fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         >
           <motion.aside
@@ -51,8 +48,8 @@ export default function ResponsiveSidebar({
             </div>
 
             {/* Contenido del menú */}
-            <div className="flex-1 overflow-y-auto mr-2">
-              <SideNavBar  userData={userData} />{" "}
+            <div className="flex-1 overflow-y-auto">
+              <SideNavBar userData={userData} onNavigate={() => setIsOpen(false)} />
             </div>
           </motion.aside>
         </motion.div>

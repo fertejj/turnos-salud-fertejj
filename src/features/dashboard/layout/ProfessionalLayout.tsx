@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import SidebarToggle from "./SidebarToggle";
-import ResponsiveSidebar from "./ResponsiveSidebar";
+import SidebarToggle from "./sidenavbar/SidebarToggle";
 import { getAuthInstance } from "../../../services/firebase/auth";
 import { getUserByUID } from "../services/userService";
 import type { ProfessionalUser } from "../types/user";
 import FullPageSpinner from "../../../shared/components/ui/FullPageSpinner";
+import ResponsiveSidebar from "./sidenavbar/ResponsiveSidebar";
 
 export default function ProfessionalLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [userData, setUserData] = useState<ProfessionalUser | null>(null);
+  const [userData, setUserData] = useState<ProfessionalUser | null>();
   const [loadingUser, setLoadingUser] = useState(true);
-  
 
   useEffect(() => {
     const initUser = async () => {
@@ -47,7 +46,13 @@ export default function ProfessionalLayout() {
       {/* Sidebar fijo en desktop */}
 
       {/* Sidebar responsivo animado en mobile */}
-      <ResponsiveSidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} userData={userData} />
+      {userData && (
+        <ResponsiveSidebar
+          isOpen={isSidebarOpen}
+          setIsOpen={setIsSidebarOpen}
+          userData={userData}
+        />
+      )}
 
       {/* Contenido principal */}
       <main className="flex-1 p-6 transition-all duration-300 bg-background">

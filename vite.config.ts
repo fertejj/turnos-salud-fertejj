@@ -1,6 +1,6 @@
-import { defineConfig } from 'vitest/config'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vite.dev/config/
@@ -11,6 +11,12 @@ export default defineConfig({
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
+          'firebase-vendor': [
+            'firebase/app',
+            'firebase/auth',
+            'firebase/firestore',
+          ],
+          'ui-vendor': ['lucide-react', 'framer-motion'],
         },
       },
     },
@@ -23,4 +29,4 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
     },
   },
-})
+});

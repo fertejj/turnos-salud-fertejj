@@ -1,8 +1,14 @@
+// src/services/firebase/firestore.ts
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 import { firebaseConfig } from "./config";
 
-export const getFirestoreInstance = async () => {
-  const { initializeApp, getApps } = await import("firebase/app");
-  const { getFirestore } = await import("firebase/firestore"); // 👈 firestore completo
-  const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-  return getFirestore(app);
+let firestoreInstance: ReturnType<typeof getFirestore> | null = null;
+
+export const getFirestoreInstance = (): ReturnType<typeof getFirestore> => {
+  if (!firestoreInstance) {
+    const app = initializeApp(firebaseConfig);
+    firestoreInstance = getFirestore(app);
+  }
+  return firestoreInstance;
 };
